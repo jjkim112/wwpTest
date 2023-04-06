@@ -1,0 +1,31 @@
+.rangeGrid {
+  display: grid;
+  margin: 20px 0px;
+  justify-content: center;
+  align-content: center;
+  gap: 1px;
+  grid-template-columns: repeat(13, 33px);
+  grid-template-rows: repeat(13, 33px);
+}
+
+.notContainItem {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(150, 150, 150, 0.3);
+  color: rgba(150, 150, 150, 0.8);
+}
+.containItem {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: red;
+  color: white;
+}
+.containItemPocket {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: red;
+  color: yellow;
+}

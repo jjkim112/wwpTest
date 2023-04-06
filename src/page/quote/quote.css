@@ -1,0 +1,25 @@
+.oneQuote {
+}
+.onequote :hover ~ .pokerQuote {
+  display: none;
+}
+.onequote :hover ~ .lifeQuote {
+  display: inline-block;
+}
+
+.pokerQuote {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background-color: black;
+  color: white;
+  border: solid 1px black;
+}
+
+.lifeQuote {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: solid 2px red;
+  background-color: yellow;
+}
