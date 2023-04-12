@@ -1,5 +1,5 @@
 import styles from "./CardSetDialog.module.css";
-import basic from "./basic.json";
+import basic from "../utils/basic.json";
 
 function CardSetDialog({ setCardFunc, setModalOpen, origin }) {
   // 모달 끄기

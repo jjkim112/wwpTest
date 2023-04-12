@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import PokerCalPage from "../poker_cal/PokerCalPage";
 
 function HomePage(props) {
   const {} = props;
@@ -16,6 +17,7 @@ function HomePage(props) {
       <BtnHandRank />
       <BtnPreFlopRange />
       <BtnQuote />
+      <BtnPokerCalPage />
     </div>
   );
 }
@@ -36,6 +38,9 @@ const BtnPreFlopRange = () => {
 };
 const BtnQuote = () => {
   return <BasicBtn name="포커 명언" route="/quote" />;
+};
+const BtnPokerCalPage = () => {
+  return <BasicBtn name="포커 계산기" route="/poker-cal" />;
 };
 
 const BasicBtn = (props) => {

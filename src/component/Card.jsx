@@ -1,10 +1,10 @@
 import { useState } from "react";
 import CardSetDialog from "./CardSetDialog";
-import basic from "./basic.json";
+import basic from "../utils/basic.json";
 
 const Card = (props) => {
   return (
-    <div>
+    <div className="disable-blur">
       <img
         className="object-cover"
         src={getCardImgRoute(props.card)}

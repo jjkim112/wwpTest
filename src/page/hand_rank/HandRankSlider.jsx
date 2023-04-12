@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
-import handData from "./hand_data.json";
+import handData from "../../utils/basic.json";
 
 import "./hand_rank.css";
 

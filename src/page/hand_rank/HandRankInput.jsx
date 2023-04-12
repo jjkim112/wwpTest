@@ -1,5 +1,5 @@
 import { useState } from "react";
-import basic from "../../component/basic.json";
+import basic from "../../utils/basic.json";
 import Card from "../../component/Card";
 import CardSetDialog from "../../component/CardSetDialog";
 import handData from "./hand_data.json";
