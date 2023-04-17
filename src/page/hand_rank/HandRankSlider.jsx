@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
 import handData from "../../utils/basic.json";
 
-import "./hand_rank.css";
+import "./hand_data.css";
 
 const HandRankSlider = () => {
   const [percentage, setPercentage] = useState(30);

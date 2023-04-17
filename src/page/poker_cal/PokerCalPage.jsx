@@ -110,7 +110,7 @@ const wholeCard = [
   "ht",
   "hj",
   "hq",
-  "hk",
+  "..",
 ];
 const isCard = (value) => {
   // c2, dt, ha, s9 : true,  s1, tt, eq : false
@@ -149,6 +149,8 @@ const getRealHands = (hands) => {
 };
 
 const PokerCalPage = () => {
+  const [clickedDiv, setClickedDiv] = useState(null);
+
   const [remainCards, setRemainCards] = useState(
     wholeCard.map((v, _) => {
       return {
@@ -206,56 +208,156 @@ const PokerCalPage = () => {
       <div className="flex">
         <div className="grid grid-cols-5">
           <div></div>
-          <OneSeat hand={selHands[0]} rank={ranks[0]} />
-          <OneSeat hand={selHands[1]} rank={ranks[1]} />
-          <OneSeat hand={selHands[2]} rank={ranks[2]} />
+          <OneSeat
+            hand={selHands[0]}
+            rank={ranks[0]}
+            setClickedDiv={setClickedDiv}
+          />
+          <OneSeat
+            hand={selHands[1]}
+            rank={ranks[1]}
+            setClickedDiv={setClickedDiv}
+          />
+          <OneSeat
+            hand={selHands[2]}
+            rank={ranks[2]}
+            setClickedDiv={setClickedDiv}
+          />
           <div></div>
-          <OneSeat hand={selHands[3]} rank={ranks[3]} />
+          <OneSeat
+            hand={selHands[3]}
+            rank={ranks[3]}
+            setClickedDiv={setClickedDiv}
+          />
           <div className="col-span-3 row-span-2">
             <CardTable
               communityCards={communityCards}
               setCommunitCards={setCommunityCards}
+              setClickedDiv={setClickedDiv}
             />
           </div>
-          <OneSeat hand={selHands[4]} rank={ranks[4]} />
-          <OneSeat hand={selHands[5]} rank={ranks[5]} />
-          <OneSeat hand={selHands[6]} rank={ranks[6]} />
+          <OneSeat
+            hand={selHands[4]}
+            rank={ranks[4]}
+            setClickedDiv={setClickedDiv}
+          />
+          <OneSeat
+            hand={selHands[5]}
+            rank={ranks[5]}
+            setClickedDiv={setClickedDiv}
+          />
+          <OneSeat
+            hand={selHands[6]}
+            rank={ranks[6]}
+            setClickedDiv={setClickedDiv}
+          />
           <div></div>
-          <OneSeat hand={selHands[7]} rank={ranks[7]} />
-          <OneSeat hand={selHands[8]} rank={ranks[8]} />
-          <OneSeat hand={selHands[9]} rank={ranks[9]} />
+          <OneSeat
+            hand={selHands[7]}
+            rank={ranks[7]}
+            setClickedDiv={setClickedDiv}
+          />
+          <OneSeat
+            hand={selHands[8]}
+            rank={ranks[8]}
+            setClickedDiv={setClickedDiv}
+          />
+          <OneSeat
+            hand={selHands[9]}
+            rank={ranks[9]}
+            setClickedDiv={setClickedDiv}
+          />
           <div></div>
         </div>
 
-        <div className="flex">
-          <div className="flex flex-col mr-2">
-            {remainCards.slice(0, 13).map((v, i) => {
-              return <Card key={i} card={v.card} width="36px" />;
-            })}
-          </div>
-          <div className="flex flex-col mr-2">
-            {remainCards.slice(13, 26).map((v, i) => {
-              return <Card key={i} card={v.card} width="36px" />;
-            })}
-          </div>
-          <div className="flex flex-col mr-2">
-            {remainCards.slice(26, 39).map((v, i) => {
-              return <Card key={i} card={v.card} width="36px" />;
-            })}
-          </div>
-          <div className="flex flex-col mr-2">
-            {remainCards.slice(39, 52).map((v, i) => {
-              return <Card key={i} card={v.card} width="36px" />;
-            })}
-          </div>
-        </div>
+        <CardSelPart
+          remainCards={remainCards}
+          setRemainCards={setRemainCards}
+        />
       </div>
     </div>
   );
 };
-
+const CardSelPart = ({ clickCardFunc, remainCards, setRemainCards }) => {
+  return (
+    <div className="flex">
+      <div className="flex flex-col mr-2">
+        {remainCards.slice(0, 13).map((v, i) => {
+          return <PickCard card={v.card} />;
+          // return <Card key={i} card={v.card} width="36px" />;
+        })}
+      </div>
+      <div className="flex flex-col mr-2">
+        {remainCards.slice(13, 26).map((v, i) => {
+          return <PickCard card={v.card} />;
+          // return <Card key={i} card={v.card} width="36px" />;
+        })}
+      </div>
+      <div className="flex flex-col mr-2">
+        {remainCards.slice(26, 39).map((v, i) => {
+          return <PickCard card={v.card} />;
+          // return <Card key={i} card={v.card} width="36px" />;
+        })}
+      </div>
+      <div className="flex flex-col mr-2">
+        {remainCards.slice(39, 52).map((v, i) => {
+          return <PickCard card={v.card} />;
+          // return <Card key={i} card={v.card} width="36px" />;
+        })}
+      </div>
+    </div>
+  );
+};
+const shapes = {
+  s: "♠️",
+  d: "♦️",
+  c: "♣️",
+  h: "♥️",
+};
+const numbers = {
+  2: "2",
+  3: "3",
+  4: "4",
+  5: "5",
+  6: "6",
+  7: "7",
+  8: "8",
+  9: "9",
+  t: "10",
+  j: "J",
+  q: "Q",
+  k: "K",
+  a: "A",
+};
 const PickCard = ({ card }) => {
-  return <div>card</div>;
+  return (
+    <div className="w-8 h-12 relative border-2 rounded-sm cursor-pointer">
+      {isCard(card) ? (
+        <>
+          <div
+            className={`absolute top-0 left-0 ${
+              card[0] == "d" || card[0] == "h" ? "text-red-500" : null
+            }`}
+          >
+            {shapes[card[0]]}
+          </div>
+          <div
+            className={`absolute right-0 bottom-0 text-xl ${
+              card[0] == "d" || card[0] == "h" ? "text-red-500" : null
+            }`}
+          >
+            {numbers[card[1]]}
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 text-gray-300">
+            x
+          </div>
+        </>
+      )}
+    </div>
+  );
 };
 const CardTable = ({ communityCards, setCommunitCards }) => {
   return (
@@ -266,15 +368,27 @@ const CardTable = ({ communityCards, setCommunitCards }) => {
     </div>
   );
 };
-const OneSeat = ({ hand, rank }) => {
+const OneSeat = ({ hand, rank, setClickedDiv }) => {
   return (
     <div className="flex flex-col items-center">
-      <div className="w-36 h-24 mx-4 flex justify-center items-center border-2 rounded-xl">
-        <Card
-          card={isRealHand(hand) ? hand[0] : ""}
-          width="60px"
-          height="90px"
-        />
+      <div className="w-36 h-24 mx-4 flex justify-center items-center rounded-xl">
+        <div
+          onClick={(event) => {
+            setClickedDiv(event.target);
+            const shape = "s";
+            const num = "t";
+            event.target.src = `/assets/images/card/${shape}${num}.png`;
+            event.target.style.border = "1px solid red";
+            event.target.style.border = "none";
+          }}
+        >
+          <Card
+            card={isRealHand(hand) ? hand[0] : ""}
+            width="60px"
+            height="90px"
+          />
+        </div>
+
         <div className="mx-1"></div>
         <Card
           card={isRealHand(hand) ? hand[1] : ""}
