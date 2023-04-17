@@ -1,9 +1,9 @@
 import { useState } from "react";
 import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
-import handData from "../../utils/basic.json";
+import handData from "./hand_data.json";
 
-import "./hand_data.css";
+import "./hand_rank.css";
 
 const HandRankSlider = () => {
   const [percentage, setPercentage] = useState(30);
