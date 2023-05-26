@@ -1,62 +1,32 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import basic from "../../utils/basic.json";
-import { getFamilyFrom, getNumWhichWin } from "../../utils/poker_func";
+import { getResult } from "../../utils/poker_func";
 import { json } from "react-router-dom";
 import Card from "../../component/Card";
+import "./style.css";
+import CardSetDialog from "./CardSetDialog";
 
-const posiCard = {
-  sa: 0,
-  s2: 1,
-  s3: 2,
-  s4: 3,
-  s5: 4,
-  s6: 5,
-  s7: 6,
-  s8: 7,
-  s9: 8,
-  st: 9,
-  sj: 10,
-  sq: 11,
-  sk: 12,
-  da: 13,
-  d2: 14,
-  d3: 15,
-  d4: 16,
-  d5: 17,
-  d6: 18,
-  d7: 19,
-  d8: 20,
-  d9: 21,
-  dt: 22,
-  dj: 23,
-  dq: 24,
-  dk: 25,
-  ca: 26,
-  c2: 27,
-  c3: 28,
-  c4: 29,
-  c5: 30,
-  c6: 31,
-  c7: 32,
-  c8: 33,
-  c9: 34,
-  ct: 35,
-  cj: 36,
-  cq: 37,
-  ck: 38,
-  ha: 39,
-  h2: 40,
-  h3: 41,
-  h4: 42,
-  h5: 43,
-  h6: 44,
-  h7: 45,
-  h8: 46,
-  h9: 47,
-  ht: 48,
-  hj: 49,
-  hq: 50,
-  hk: 51,
+const shapes = {
+  s: "♠️",
+  d: "♦️",
+  c: "♣️",
+  h: "♥️",
+};
+
+const numbers = {
+  2: "2",
+  3: "3",
+  4: "4",
+  5: "5",
+  6: "6",
+  7: "7",
+  8: "8",
+  9: "9",
+  t: "10",
+  j: "J",
+  q: "Q",
+  k: "K",
+  a: "A",
 };
 const wholeCard = [
   "sa",
@@ -110,8 +80,22 @@ const wholeCard = [
   "ht",
   "hj",
   "hq",
-  "..",
+  "hk",
 ];
+
+class OnePlayer {
+  constructor(hand) {
+    this.hand = hand;
+  }
+}
+class detailInfo {
+  constructor(hand, wins, ties) {
+    this.hand = hand;
+    this.wins = wins;
+    this.ties = ties;
+  }
+}
+
 const isCard = (value) => {
   // c2, dt, ha, s9 : true,  s1, tt, eq : false
   if (
@@ -122,16 +106,6 @@ const isCard = (value) => {
     return true;
   }
   return false;
-};
-
-const cardLength = (communityCards) => {
-  var len = 0;
-  for (let index = 0; index < communityCards.length; index++) {
-    if (isCard(communityCards[index])) {
-      len++;
-    }
-  }
-  return len;
 };
 
 const isRealHand = (hand) => {
@@ -148,286 +122,343 @@ const getRealHands = (hands) => {
   });
 };
 
-const PokerCalPage = () => {
-  const [clickedDiv, setClickedDiv] = useState(null);
+let prevHash = "";
+var setCardFunc = () => {}; // dialog props
 
-  const [remainCards, setRemainCards] = useState(
-    wholeCard.map((v, _) => {
-      return {
-        card: v,
-      };
-    })
-  );
-  const [selHands, setSelHands] = useState([
-    ["", ""],
-    ["s5", "da"],
-    ["", ""],
-    ["h5", "ha"],
-    ["", ""],
-    ["", ""],
-    ["", ""],
-    ["", ""],
-    ["", ""],
-    ["d2", "dk"],
+const PokerCalPage = () => {
+  const toCardHash = (cardArray) => {
+    return cardArray.reduce((prev, curr) => {
+      // TODO
+      // card 값 serialization 하기. 저장하기.
+      // 같은 가드 패들의 값이 들어오면, 저 함수를 돌리지마!
+      return prev + curr;
+    });
+  };
+  const [selPlayers, setSelPlayers] = useState([
+    new OnePlayer(["s5", "da"]),
+    new OnePlayer(["h5", "ha"]),
+    new OnePlayer(["d2", "dk"]),
+    new OnePlayer(["c2", "ck"]),
   ]);
-  const [ranks, setRanks] = useState([{}, {}, {}, {}, {}, {}, {}, {}, {}, {}]);
-  const [communityCards, setCommunityCards] = useState([
-    "sk",
-    "s2",
-    "s3",
-    "",
-    "",
+  const [communityCards, setCommunityCards] = useState(["", "", "", "", ""]);
+  const [handDetails, setHandDetails] = useState([]);
+
+  var [dialogOpen, setDialogOpen] = useState(false);
+  var [pickCards, setPickCards] = useState([
+    "s5",
+    "da",
+    "h5",
+    "ha",
+    "d2",
+    "dk",
+    "c2",
+    "ck",
   ]);
+
+  var [dialogSelCard, setDialogSelCard] = useState("");
+
+  var dialogInputSetFunc = (func) => {
+    setCardFunc = func;
+  };
+
+  const getHandDetail = (hand) => {
+    var v = new detailInfo(hand, 0, 0);
+    const handDetailsListFlat = handDetails.map((value, _) => value.hand);
+    const playerHandStr = hand[0] + hand[1];
+    if (handDetailsListFlat.includes(playerHandStr)) {
+      const temp = handDetails[handDetailsListFlat.indexOf(playerHandStr)];
+      v = new detailInfo(temp.hands, temp.wins, temp.ties);
+    }
+    return v;
+  };
+
+  const refreshHandDetails = () => {
+    const realHands = getRealHands(selPlayers.map((v, i) => v.hand));
+    // console.log("prev= " + prevHash);
+    const cardSerialize = [
+      ...realHands.reduce((p, c) => [...p, ...c]),
+      ...communityCards,
+    ];
+    var process = 0;
+    for (let index = 0; index < communityCards.length; index++) {
+      const cardStr = communityCards[index];
+      if (isCard(cardStr)) {
+        process++;
+      } else {
+        break;
+      }
+    }
+    if (!(process == 0 || process == 3 || process == 4 || process == 5)) {
+      return;
+    }
+    for (let index = 0; index < process; index++) {
+      if (!isCard(communityCards[index])) {
+        return;
+      }
+    }
+
+    // console.log(cardSerialize);
+    // console.log(toCardHash(cardSerialize));
+    if (toCardHash(cardSerialize) != prevHash) {
+      prevHash = toCardHash(cardSerialize);
+      // console.log("prev= " + prevHash);
+      const list = getResult(realHands, communityCards);
+      setHandDetails(
+        list.map((v, i) => {
+          return new detailInfo(v.hands, v.wins, v.ties);
+        })
+      );
+    }
+  };
 
   useEffect(() => {
-    const realHands = getRealHands(selHands);
-    if (realHands.length >= 2 && cardLength(communityCards) >= 3) {
-      const list = getNumWhichWin(realHands, communityCards);
-      const tempRanks = selHands.map((v, _) => {
-        if (isRealHand(v)) {
-          return list.pop();
-        }
-        return {};
-      });
-      console.log(tempRanks);
-      setRanks(tempRanks);
-    }
-    // console.log(list);
-    // const { rank, cards } = getFamilyFrom(
-    //   ["s5", "da"],
-    //   ["sk", "s2", "s3", "d4", "d7"]
-    // );
-    // console.log({ rank, cards });
-  }, [communityCards, selHands]);
+    // refreshHandDetails(); // 이게 실행되고, useState가 업데이트 됨!!
+    setTimeout(() => {
+      refreshHandDetails();
+    });
+  }, [communityCards, selPlayers]);
+
+  useEffect(() => {
+    // console.log(selPlayers);
+  }, [selPlayers]);
+
+  useEffect(() => {
+    // console.log(handDetails);
+  }, [handDetails]);
 
   return (
-    <div className="flex flex-col items-center h-full">
-      <div className="mx-auto text-center text-4xl my-4">
-        포커 계산기 (n-way)
-      </div>
-      <div className="flex">
-        <div className="grid grid-cols-5">
-          <div></div>
-          <OneSeat
-            hand={selHands[0]}
-            rank={ranks[0]}
-            setClickedDiv={setClickedDiv}
-          />
-          <OneSeat
-            hand={selHands[1]}
-            rank={ranks[1]}
-            setClickedDiv={setClickedDiv}
-          />
-          <OneSeat
-            hand={selHands[2]}
-            rank={ranks[2]}
-            setClickedDiv={setClickedDiv}
-          />
-          <div></div>
-          <OneSeat
-            hand={selHands[3]}
-            rank={ranks[3]}
-            setClickedDiv={setClickedDiv}
-          />
-          <div className="col-span-3 row-span-2">
-            <CardTable
-              communityCards={communityCards}
-              setCommunitCards={setCommunityCards}
-              setClickedDiv={setClickedDiv}
-            />
-          </div>
-          <OneSeat
-            hand={selHands[4]}
-            rank={ranks[4]}
-            setClickedDiv={setClickedDiv}
-          />
-          <OneSeat
-            hand={selHands[5]}
-            rank={ranks[5]}
-            setClickedDiv={setClickedDiv}
-          />
-          <OneSeat
-            hand={selHands[6]}
-            rank={ranks[6]}
-            setClickedDiv={setClickedDiv}
-          />
-          <div></div>
-          <OneSeat
-            hand={selHands[7]}
-            rank={ranks[7]}
-            setClickedDiv={setClickedDiv}
-          />
-          <OneSeat
-            hand={selHands[8]}
-            rank={ranks[8]}
-            setClickedDiv={setClickedDiv}
-          />
-          <OneSeat
-            hand={selHands[9]}
-            rank={ranks[9]}
-            setClickedDiv={setClickedDiv}
-          />
-          <div></div>
-        </div>
+    <div className="container mx-auto">
+      <div className="top flex flex-col justify-center">
+        <div className="text-center text-4xl my-4">포커 계산기</div>
+        <div className="text-center text-2xl my-4">커뮤니티 카드</div>
+        <CommunityCardPart
+          setDialogOpen={setDialogOpen}
+          communityCards={communityCards}
+          clickFunc={(cardValue, cardIndex) => {
+            setDialogSelCard(cardValue);
+            dialogInputSetFunc((targetCard) => {
+              var delCard = "";
+              var addCard = "";
+              if (targetCard == cardValue) {
+                delCard = targetCard;
+              } else {
+                delCard = cardValue;
+                addCard = targetCard;
+              }
 
-        <CardSelPart
-          remainCards={remainCards}
-          setRemainCards={setRemainCards}
+              setCommunityCards((prevCommunityCards) => {
+                var temp = [...prevCommunityCards];
+                if (targetCard == cardValue) {
+                  temp[cardIndex] = "";
+                } else {
+                  temp[cardIndex] = targetCard;
+                }
+                return temp;
+              });
+
+              setPickCards((prevPickCards) => {
+                var index = -1;
+                if (delCard != "") {
+                  index = prevPickCards.indexOf(delCard);
+                  if (index > -1) {
+                    prevPickCards.splice(index, 1);
+                  }
+                }
+                index = -1;
+                if (addCard != "") {
+                  prevPickCards.push(addCard);
+                }
+                return prevPickCards;
+              });
+            });
+            setDialogOpen(true);
+          }}
+          setCommunityCards={setCommunityCards}
         />
       </div>
-    </div>
-  );
-};
-const CardSelPart = ({ clickCardFunc, remainCards, setRemainCards }) => {
-  return (
-    <div className="flex">
-      <div className="flex flex-col mr-2">
-        {remainCards.slice(0, 13).map((v, i) => {
-          return <PickCard card={v.card} />;
-          // return <Card key={i} card={v.card} width="36px" />;
+      <div className="middle px-8">
+        {selPlayers.map((v, i) => {
+          const detail = getHandDetail(v.hand);
+          return (
+            <OnePlayerPart
+              player={v}
+              key={`${i}_${v.hand}`}
+              detail={detail}
+              clickFunc={(cardValue, handIndex) => {
+                setDialogSelCard(cardValue);
+                dialogInputSetFunc((targetCard) => {
+                  var delCard = "";
+                  var addCard = "";
+                  if (targetCard == cardValue) {
+                    delCard = targetCard;
+                  } else {
+                    delCard = cardValue;
+                    addCard = targetCard;
+                  }
+                  setSelPlayers((prevPlayers) => {
+                    var temp = [...prevPlayers];
+                    if (targetCard == cardValue) {
+                      temp[i].hand[handIndex] = "";
+                    } else {
+                      temp[i].hand[handIndex] = targetCard;
+                    }
+                    return temp;
+                  });
+                  setPickCards((prevPickCards) => {
+                    var index = -1;
+                    if (delCard != "") {
+                      index = prevPickCards.indexOf(delCard);
+                      if (index > -1) {
+                        prevPickCards.splice(index, 1);
+                      }
+                    }
+                    index = -1;
+                    if (addCard != "") {
+                      prevPickCards.push(addCard);
+                    }
+                    return prevPickCards;
+                  });
+                });
+                setDialogOpen(true);
+              }}
+              delFunc={() => {
+                console.log("del func");
+                const card1 = selPlayers[i].hand[0];
+                const card2 = selPlayers[i].hand[1];
+
+                setSelPlayers((prevPlayers) => {
+                  var temp = [...prevPlayers];
+                  temp.splice(i, 1);
+                  return temp;
+                });
+                setPickCards((prevPickCards) => {
+                  var temp = [...prevPickCards];
+                  var index = -1;
+                  if (card1 != "") {
+                    index = prevPickCards.indexOf(card1);
+                    if (index > -1) {
+                      prevPickCards.splice(index, 1);
+                    }
+                  }
+                  if (card2 != "") {
+                    index = prevPickCards.indexOf(card2);
+                    if (index > -1) {
+                      prevPickCards.splice(index, 1);
+                    }
+                  }
+                  return temp;
+                });
+              }}
+            />
+          );
         })}
       </div>
-      <div className="flex flex-col mr-2">
-        {remainCards.slice(13, 26).map((v, i) => {
-          return <PickCard card={v.card} />;
-          // return <Card key={i} card={v.card} width="36px" />;
-        })}
+
+      <div className="bottom">
+        <ActionPart
+          setSelPlayers={setSelPlayers}
+          setCommunityCards={setCommunityCards}
+        />
       </div>
-      <div className="flex flex-col mr-2">
-        {remainCards.slice(26, 39).map((v, i) => {
-          return <PickCard card={v.card} />;
-          // return <Card key={i} card={v.card} width="36px" />;
-        })}
-      </div>
-      <div className="flex flex-col mr-2">
-        {remainCards.slice(39, 52).map((v, i) => {
-          return <PickCard card={v.card} />;
-          // return <Card key={i} card={v.card} width="36px" />;
-        })}
-      </div>
-    </div>
-  );
-};
-const shapes = {
-  s: "♠️",
-  d: "♦️",
-  c: "♣️",
-  h: "♥️",
-};
-const numbers = {
-  2: "2",
-  3: "3",
-  4: "4",
-  5: "5",
-  6: "6",
-  7: "7",
-  8: "8",
-  9: "9",
-  t: "10",
-  j: "J",
-  q: "Q",
-  k: "K",
-  a: "A",
-};
-const PickCard = ({ card }) => {
-  return (
-    <div className="w-8 h-12 relative border-2 rounded-sm cursor-pointer">
-      {isCard(card) ? (
-        <>
-          <div
-            className={`absolute top-0 left-0 ${
-              card[0] == "d" || card[0] == "h" ? "text-red-500" : null
-            }`}
-          >
-            {shapes[card[0]]}
-          </div>
-          <div
-            className={`absolute right-0 bottom-0 text-xl ${
-              card[0] == "d" || card[0] == "h" ? "text-red-500" : null
-            }`}
-          >
-            {numbers[card[1]]}
-          </div>
-        </>
-      ) : (
-        <>
-          <div className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 text-gray-300">
-            x
-          </div>
-        </>
+      {dialogOpen && (
+        <CardSetDialog
+          cardSetFunc={setCardFunc}
+          setDialogOpen={setDialogOpen}
+          pickCards={pickCards}
+          selCard={dialogSelCard}
+        />
       )}
     </div>
   );
 };
-const CardTable = ({ communityCards, setCommunitCards }) => {
+
+const CommunityCardPart = ({ communityCards, clickFunc }) => {
   return (
-    <div className="relative flex justify-center items-center top-1/2 -translate-y-1/2 gap-1">
-      {communityCards.map((card, i) => {
-        return <Card key={i} card={card} width="80px" height="120px" />;
+    <div className="flex">
+      {communityCards.map((v, i) => {
+        return (
+          <div className="mx-2" key={`${v}_${i}`}>
+            <OneCardDiv
+              card={v}
+              cardClickFunc={() => {
+                clickFunc(v, i);
+              }}
+            />
+          </div>
+        );
       })}
     </div>
   );
 };
-const OneSeat = ({ hand, rank, setClickedDiv }) => {
-  return (
-    <div className="flex flex-col items-center">
-      <div className="w-36 h-24 mx-4 flex justify-center items-center rounded-xl">
-        <div
-          onClick={(event) => {
-            setClickedDiv(event.target);
-            const shape = "s";
-            const num = "t";
-            event.target.src = `/assets/images/card/${shape}${num}.png`;
-            event.target.style.border = "1px solid red";
-            event.target.style.border = "none";
-          }}
-        >
-          <Card
-            card={isRealHand(hand) ? hand[0] : ""}
-            width="60px"
-            height="90px"
-          />
-        </div>
 
+const ActionPart = ({ setSelPlayers, setCommunityCards }) => {
+  return (
+    <div className="flex">
+      <div
+        className="border-2 w-24 h-12"
+        onClick={() => {
+          setSelPlayers((prev) => {
+            var temp = [...prev];
+            temp.push(new OnePlayer(["", ""]));
+            return temp;
+          });
+        }}
+      >
+        추가
+      </div>
+      <div className="mx-8"></div>
+      <div className="border-2 w-24 h-12">리셋</div>
+    </div>
+  );
+};
+
+const OnePlayerPart = ({ player, detail, clickFunc, delFunc }) => {
+  return (
+    <div className="flex items-center">
+      <div className="w-36 mx-4 my-2 flex justify-center items-center rounded-xl">
+        <OneCardDiv
+          card={player.hand[0]}
+          cardClickFunc={() => {
+            clickFunc(player.hand[0], 0);
+          }}
+        />
         <div className="mx-1"></div>
-        <Card
-          card={isRealHand(hand) ? hand[1] : ""}
-          width="60px"
-          height="90px"
+        <OneCardDiv
+          card={player.hand[1]}
+          cardClickFunc={() => {
+            clickFunc(player.hand[1], 1);
+          }}
         />
       </div>
       <div className="w-36 h-12 bg-red-300 items-center flex flex-col">
-        {Object.keys(rank).length == 0 ? (
-          <>
-            <div></div>
-            <div></div>
-          </>
-        ) : (
-          <>
-            <div>win: {rank.win}</div>
-            <div>tie: {rank.tie}</div>
-          </>
-        )}
+        <div>win: {detail.wins}</div>
+        <div>tie: {detail.ties}</div>
+      </div>
+      <div
+        className="ml-4 border-2 border-black hover:cursor-pointer"
+        onClick={delFunc}
+      >
+        삭제버튼
       </div>
     </div>
   );
 };
 
-const TypeSel = ({ selPosition, setSelPosition }) => {
-  return <div className="flex justify-center gap-4"></div>;
-};
-
-const OneTypeBtn = ({ isSel, content, onClick }) => {
+const OneCardDiv = ({ card, cardClickFunc }) => {
   return (
     <div
-      className={
-        isSel
-          ? "block mx-2 bg-red-200 shadow-xl rounded-full border-2 border-gray-400 cursor-pointer px-2 py-1"
-          : "block mx-2 hover:bg-red-200 shadow-xl rounded-full bg-white       border-2 border-gray-400 cursor-pointer px-2 py-1"
-      }
-      onClick={onClick}
+      className="hover:cursor-pointer"
+      onClick={(event) => {
+        cardClickFunc();
+        // setClickedDiv(event.target);
+        // const shape = "s";
+        // const num = "t";
+        // event.target.src = `/assets/images/card/${shape}${num}.png`;
+        // event.target.style.border = "1px solid red";
+        // event.target.style.border = "none";
+      }}
     >
-      {content}
+      <Card card={isCard(card) ? card : ""} width="80px" height="120px" />
     </div>
   );
 };

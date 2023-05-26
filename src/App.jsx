@@ -11,7 +11,7 @@ import PokerCalPage from "./page/poker_cal/PokerCalPage";
 
 function App() {
   return (
-    <div className="bg-white w-full h-screen my-0">
+    <div className="w-screen h-screen my-0">
       <BrowserRouter>
         <Header />
         <Routes>
