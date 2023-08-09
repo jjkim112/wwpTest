@@ -10,6 +10,7 @@ import QuotePage from './page/quote/QuotePage';
 import PokerCalPage from './page/poker_cal/PokerCalPage';
 import NotFound from './page/404';
 import { Header } from './page/Header';
+import HoldemBase from './page/holdem_base/holdem_base';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -20,8 +21,9 @@ root.render(
       <Header></Header>
       <Routes>
         <Route path="/" element={<HomePage />}></Route>
-        <Route path="/hand-range" element={<HandRankPage />}></Route>
-        <Route path="/pre-flop-range" element={<PreFlopRangePage />}></Route>
+        {/* <Route path="/hand-range" element={<HandRankPage />}></Route>
+        <Route path="/pre-flop-range" element={<PreFlopRangePage />}></Route> */}
+        <Route path="/holdem-base" element={<HoldemBase />}></Route>
         <Route path="/quote" element={<QuotePage />}></Route>
         <Route path="/poker-cal" element={<PokerCalPage />}></Route>
         <Route path="*" element={<NotFound />}></Route>
