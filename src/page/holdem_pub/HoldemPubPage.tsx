@@ -1,42 +1,55 @@
-import { useState } from 'react';
-import Slick from '../../utils/slider/Slick';
-import './holdemPub.css';
+import { useRef, useState } from "react";
+import Slick from "../../utils/slider/Slick";
+import "./holdemPub.css";
+import { redirect } from "react-router-dom";
+import { HoldemPubOnePage } from "./pub_page/HoldemPubOnePage";
+
+export function HoldemPubPage() {
+  const queryParameters = new URLSearchParams(window.location.search);
+  const id = queryParameters.get("id");
+
+  return <div>{id === null ? HoldemPubListPage() : HoldemPubOnePage(id)}</div>;
+}
 
 function HoldemPubListPage() {
   const pubList = [
     {
-      imgUrl: '/assets/images/wp_title.gif',
-      pubName: '슈에뜨 펍',
-      place: '제주',
-      popularityType: '인기좋음',
+      imgUrl: "/assets/images/wp_title.gif",
+      pubName: "슈에뜨 펍",
+      place: "제주",
+      popularityType: "인기좋음",
       starRating: 5.0,
-      content: 'djsakljdaklsjdlsajdjlksajdlajsldjlsajdasdasdasdasdsa',
+      content: "djsakljdaklsjdlsajdjlksajdlajsldjlsajdasdasdasdasdsa",
     },
     {
-      imgUrl: '/assets/images/background.png',
-      pubName: '럭키 라운지펍',
-      place: '제주',
-      popularityType: '신규',
+      imgUrl: "/assets/images/background.png",
+      pubName: "럭키 라운지펍",
+      place: "제주",
+      popularityType: "신규",
       starRating: 4.0,
-      content: 'djsakljdaklsjdlsajdjlksajdlajsldjlsajdasdasdasdasdsa',
+      content: "djsakljdaklsjdlsajdjlksajdlajsldjlsajdasdasdasdasdsa",
     },
     {
-      imgUrl: '/assets/images/background.png',
-      pubName: '럭키 스튜디오',
-      place: '제주',
-      popularityType: 'best2',
+      imgUrl: "/assets/images/background.png",
+      pubName: "럭키 스튜디오",
+      place: "제주",
+      popularityType: "best2",
       starRating: 3.2,
-      content: 'djsakljdaklsjdlsajdjlksajdlajsldjlsajdasdasdasdasdsa',
+      content: "djsakljdaklsjdlsajdjlksajdlajsldjlsajdasdasdasdasdsa",
     },
     {
-      imgUrl: '/assets/images/background.png',
-      pubName: '제주',
-      place: '제주',
+      imgUrl: "/assets/images/background.png",
+      pubName: "제주",
+      place: "제주",
       popularityType: null,
       starRating: 2.2,
-      content: 'djsakljdaklsjdlsajdjlksajdlajsldjlsajdasdasdasdasdsa',
+      content: "djsakljdaklsjdlsajdjlksajdlajsldjlsajdasdasdasdasdsa",
     },
   ];
+
+  const goToPubPage = (pubId: string) => {
+    redirect(`/holdem-pub`);
+  };
 
   return (
     <div className="flex flex-col">
@@ -47,6 +60,9 @@ function HoldemPubListPage() {
             <div
               className=" flex flex-col justify-center items-center  w-full p-10 "
               key={index}
+              onClick={() => {
+                goToPubPage(item.place);
+              }}
             >
               <div className="">
                 <div className=" h-[300px] overflow-hidden  rounded-tl-md rounded-tr-md ">
@@ -150,5 +166,3 @@ function HoldemPubListPage() {
     </div>
   );
 }
-
-export default HoldemPubListPage;
