@@ -8,6 +8,8 @@ import HandRankPage from '../hand_rank/HandRankPage';
 import { type } from 'os';
 import HomePage from '../home/HomePage';
 import HandRankings from './poker_hand_rankings/HandRankings';
+import HoldemPubBase from './holdem_pub_base/HoldemPubBase';
+import HoldemTermsBase from './terms_base/HoldemTermsBase';
 type Section = {
   label: string;
 };
@@ -15,8 +17,15 @@ type Section = {
 function HoldemBase() {
   const tabs: Section[] = [
     {
+      label: '홀덤 펍 방문시',
+    },
+    {
+      label: '홀덤 용어 정리',
+    },
+    {
       label: '핸드 순위',
     },
+
     {
       label: '프리플랍 핸드',
     },
@@ -47,6 +56,10 @@ export function HoldemBaseSel({ sel }: selProps): JSX.Element {
       return <PreFlopRangePage></PreFlopRangePage>;
     case '포커(족보) 랭킹':
       return <HandRankings></HandRankings>;
+    case '홀덤 펍 방문시':
+      return <HoldemPubBase></HoldemPubBase>;
+    case '홀덤 용어 정리':
+      return <HoldemTermsBase></HoldemTermsBase>;
 
     default:
       return <div>페이지 없습니다</div>;
