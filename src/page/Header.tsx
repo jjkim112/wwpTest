@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { HeaderTap } from '../utils/header/header_tap';
 
 type IntroductionTab = {
@@ -13,8 +13,12 @@ const tabs: IntroductionTab[] = [
     mainLink: '/',
   },
   {
-    label: '홀덤 핸드 정보',
+    label: '홀덤 게임 정보',
     mainLink: '/holdem-base',
+  },
+  {
+    label: '홀덤 지점',
+    mainLink: '/holdem-pub',
   },
 
   {
@@ -25,10 +29,20 @@ const tabs: IntroductionTab[] = [
 
 export const Header = () => {
   const [activeHeaderTab, setActiveHeaderTab] = useState(0);
+  const sampleLocation = useLocation();
   let navigate = useNavigate();
   const handleClickHeaderTab = (index: number) => {
     setActiveHeaderTab(index);
   };
+
+  useEffect(() => {
+    console.log(sampleLocation.pathname);
+    tabs.map((v, i) => {
+      if (v.mainLink === sampleLocation.pathname) {
+        setActiveHeaderTab(i);
+      }
+    });
+  }, []);
 
   return (
     <div className="bg-slate-800">
