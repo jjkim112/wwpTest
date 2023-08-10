@@ -3,7 +3,7 @@ import './HoldemTermsBase.css';
 const terms = [
   {
     key: '가',
-    item: [{ title: '', content: '' }],
+    item: [{ title: 'dsa', content: 'dsadsa' }],
   },
 ];
 
@@ -22,7 +22,14 @@ export default function HoldemTermsBase() {
             <div key={i} className="category">
               <p className="title">{value.key}</p>
               <div className="list">
-                <div className="item"></div>
+                <dl className="item">
+                  {value.item.map((v, i) => (
+                    <>
+                      <dt className="tit">{v.title}</dt>
+                      <dd className="con">{v.content}</dd>
+                    </>
+                  ))}
+                </dl>
               </div>
             </div>
           ))}
