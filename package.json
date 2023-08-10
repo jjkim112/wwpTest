@@ -10,12 +10,17 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^27.5.2",
+    "@types/navermaps": "^3.6.5",
     "@types/node": "^16.18.39",
     "@types/react": "^18.2.18",
     "@types/react-dom": "^18.2.7",
     "@types/react-router-dom": "^5.3.3",
     "@types/react-slick": "^0.23.10",
     "bitset": "^5.1.1",
+<<<<<<< HEAD
+=======
+    "dotenv": "^16.3.1",
+>>>>>>> 1b6c7f4669280fc56ea7c47c025a255dfd9e73f6
     "firebase": "^10.1.0",
     "poker-odds-calc": "^0.0.14",
     "pokersolver": "^2.1.4",

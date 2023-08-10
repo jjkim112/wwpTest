@@ -13,6 +13,10 @@ const tabs: IntroductionTab[] = [
     mainLink: '/',
   },
   {
+    label: 'MapTest',
+    mainLink: '/MapTest',
+  },
+  {
     label: '홀덤 게임 정보',
     mainLink: '/holdem-base',
   },
