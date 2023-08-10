@@ -23,7 +23,7 @@ export class Pub {
     lon: number,
     links: Object[],
     photos: string[],
-    days: Object[],
+    days: Object,
     templates: GameTemplate[],
     games: Game[]
   ) {
@@ -40,6 +40,21 @@ export class Pub {
     this.games = games;
   }
 
+  get clone() {
+    return new Pub(
+      this.id,
+      this.name,
+      this.phone,
+      this.address,
+      this.lat,
+      this.lon,
+      this.links,
+      this.photos,
+      this.days,
+      this.templates,
+      this.games
+    );
+  }
   get toMap() {
     return {
       id: this.id,
@@ -61,11 +76,15 @@ export class Pub {
       const name: string = data["name"];
       const phone: string = data["phone"];
       const address: string = data["address"];
-      const lat: number = data["coordinate"]["lat"];
-      const lon: number = data["coordinate"]["lon"];
+      let lat: number = 0;
+      let lon: number = 0;
+      if (data["coordinate"] !== undefined) {
+        lat = data["coordinate"]["lat"] ?? 0;
+        lon = data["coordinate"]["lon"] ?? 0;
+      }
       const links: Object[] = data["links"];
       const photos: string[] = data["photos"];
-      const days: Object[] = data["days"];
+      const days: Object = data["days"];
       const templates: GameTemplate[] = (data["templates"] as []).map((v) =>
         GameTemplate.fromData(v)
       );
@@ -86,7 +105,7 @@ export class Pub {
       );
     } catch (error) {
       console.log(`[Pub Model] fromData e: ${error}`);
-      return new Pub("", "", "", "", 0, 0, [], [], [], [], []);
+      return new Pub("", "", "", "", 0, 0, [], [], {}, [], []);
     }
   }
 }

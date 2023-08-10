@@ -1,15 +1,36 @@
 import { Pub } from "../../../domain/Pub.model";
-import {useState} from 'react';
+import { useState, useEffect } from "react";
 
-export function HoldemPubOnePage(pubId: string) {
-    const [thisPub, setThisPub] = useState<Pub | null>(null);
+import { AppDispatch, RootState } from "../../../store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { DataService } from "../../../data/DataService";
+import { refreshGames } from "../../../reducer/gameSlice";
+import { Game } from "../../../domain/Game.model";
+
+export function HoldemPubOnePage(
+  pub: Pub,
+  games: Game[],
+  setEmptyFunc: Function
+) {
   return (
-    thisPub === null ? 
-    <div>로딩중 화면</div>
-    :
     <div>
-      holdem pub one page
-      <div>ID : {pubId}</div>
+      <div>ID : {pub.id}</div>
+      <button
+        onClick={() => {
+          setEmptyFunc();
+        }}
+      >
+        전체 보기
+      </button>
+      {games.map((game, i) => {
+        return (
+          <div>
+            <div>Game</div>
+            <div>{game.entry}</div>
+            <div>{game.players.toString()}</div>
+          </div>
+        );
+      })}
     </div>
   );
 }
