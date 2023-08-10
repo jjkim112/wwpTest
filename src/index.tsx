@@ -10,6 +10,7 @@ import NotFound from './page/404';
 import { Header } from './page/Header';
 import HoldemBase from './page/holdem_base/holdem_base';
 import HoldemPubListPage from './page/holdem_pub/HoldemPubListPage';
+import MapTest from './utils/map/Map';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -27,6 +28,7 @@ root.render(
         <Route path="/quote" element={<QuotePage />}></Route>
         <Route path="/poker-cal" element={<PokerCalPage />}></Route>
         <Route path="/holdem-pub" element={<HoldemPubListPage />}></Route>
+        <Route path="/MapTest" element={<MapTest />}></Route>
         <Route path="*" element={<NotFound />}></Route>
       </Routes>
     </BrowserRouter>
