@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 type HandRanking = {
   title: string;
@@ -81,46 +81,83 @@ function HandRankings() {
       percentage: '50.117739403%',
     },
   ];
+  const splitTitle = (title: string): string => {
+    var afterStr = title.split('(');
+    return afterStr[0];
+  };
+
+  const divRefs = useRef<Array<HTMLDivElement | null>>([]);
+
+  const handleClick = (index: number) => {
+    divRefs.current[index]?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    });
+  };
   return (
-    <div className="flex flex-col  items-center justify-center text-center">
-      {handRankingList.map((v, i) => {
-        return (
-          <div className="w-2/4 flex flex-col justify-center m-3 items-center text-center text-white whitespace-pre-wrap">
-            <div className="w-full box-border bg-slate-800 border-black rounded-tl-2xl rounded-tr-2xl p-4 mt-1 text-3xl font-medium ">
-              {v.title}
-            </div>
-            <div className=" w-full ">
-              <img
-                className="bg-slate-800 object-contain w-full mt-1"
-                src={v.imageUrl}
-                alt=""
-              />
-            </div>
+    <div>
+      <div className="max-w-screen-lg mx-auto w-1/5">
+        <div className="fixed top-14 left-3 m-4 p-4 bg-slate-700 z-50 w-1/5">
+          <div className="flex flex-col  justify-between">
+            {handRankingList.map((hand, index) => (
+              <div key={index} className="w-full   my-2 px-2">
+                <button
+                  className=" bg-slate-950 w-full text-left rounded-lg p-4"
+                  onClick={() => handleClick(index)}
+                >
+                  <h2 className="text-white text-base font-bold mb-2">
+                    {splitTitle(hand.title)}
+                  </h2>
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
 
-            <div className="flex justify-center w-full h-60 box-border bg-slate-800 border-black rounded-bl-2xl rounded-br-2xl p-4 mt-1">
-              <div className="flex flex-row w-full  h-full">
-                <div className="flex flex-col  w-3/12 h-full text-center mr-4  items-center justify-center">
-                  <div className="bg-red-500 rounded-tl-sm rounded-tr-sm py-2 w-full text-white">
-                    확률
-                  </div>
-                  <div className="bg-slate-600 h-full w-full flex items-center justify-center">
-                    <div className="w-full">{v.percentage}</div>
-                  </div>
-                </div>
+      <div className="flex flex-col  items-center justify-center text-center">
+        {handRankingList.map((v, i) => {
+          return (
+            <div className="w-2/4 flex flex-col justify-center m-3 items-center text-center text-white whitespace-pre-wrap">
+              <div
+                ref={(el) => (divRefs.current[i] = el)}
+                className="w-full box-border bg-slate-800 border-black rounded-tl-2xl rounded-tr-2xl p-4 mt-1 text-3xl font-medium "
+              >
+                {v.title}
+              </div>
+              <div className=" w-full ">
+                <img
+                  className="bg-slate-800 object-contain w-full mt-1"
+                  src={v.imageUrl}
+                  alt=""
+                />
+              </div>
 
-                <div className="flex flex-col flex-1   w-7/12 ml-auto text-center h-full  items-center justify-center">
-                  <div className="bg-blue-800 rounded-tl-sm w-full rounded-tr-sm py-2 text-white">
-                    설명
+              <div className="flex justify-center w-full h-60 box-border bg-slate-800 border-black rounded-bl-2xl rounded-br-2xl p-4 mt-1">
+                <div className="flex flex-row w-full  h-full">
+                  <div className="flex flex-col  w-3/12 h-full text-center mr-4  items-center justify-center">
+                    <div className="bg-red-500 rounded-tl-sm rounded-tr-sm py-2 w-full text-white">
+                      확률
+                    </div>
+                    <div className="bg-slate-600 h-full w-full flex items-center justify-center">
+                      <div className="w-full">{v.percentage}</div>
+                    </div>
                   </div>
-                  <div className="bg-slate-600 h-full w-full p-3 flex items-center justify-center">
-                    <div className="w-full">{v.content}</div>
+
+                  <div className="flex flex-col flex-1   w-7/12 ml-auto text-center h-full  items-center justify-center">
+                    <div className="bg-blue-800 rounded-tl-sm w-full rounded-tr-sm py-2 text-white">
+                      설명
+                    </div>
+                    <div className="bg-slate-600 h-full w-full p-3 flex items-center justify-center">
+                      <div className="w-full">{v.content}</div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
     </div>
   );
 }
