@@ -1,8 +1,8 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { wait } from "@testing-library/user-event/dist/utils/misc/wait";
-import { Pub } from "../domain/Pub.model";
-import { DataService } from "../data/DataService";
-import type { PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { wait } from '@testing-library/user-event/dist/utils/misc/wait';
+import { Pub } from '../domain/Pub.model';
+import { DataService } from '../data/DataService';
+import type { PayloadAction } from '@reduxjs/toolkit';
 
 export interface PubState {
   pubs: Pub[];
@@ -15,7 +15,7 @@ const initialState: PubState = {
 };
 
 export const pubSlice = createSlice({
-  name: "pub",
+  name: 'pub',
   initialState,
   reducers: {
     pubLoadingStart: (state) => {
@@ -25,6 +25,9 @@ export const pubSlice = createSlice({
       state.loading = false;
     },
     refreshWholePub: (state, action: PayloadAction<Pub[]>) => {
+      state.pubs = action.payload;
+    },
+    getOnePubData: (state, action: PayloadAction<Pub[]>) => {
       state.pubs = action.payload;
     },
   },

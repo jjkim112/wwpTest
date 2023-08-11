@@ -62,7 +62,7 @@ export const Header = () => {
                 navigate(tab.mainLink!);
               }}
             >
-              <span className="text-lg font-medium">{tab.label}</span>
+              <span className="text-sm font-medium">{tab.label}</span>
             </button>
           ))}
         </div>

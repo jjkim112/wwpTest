@@ -1,6 +1,6 @@
 function NotFound() {
   return (
-    <div className="flex justify-center items-center">Not Found 페이지</div>
+    <div className="flex justify-center items-center">404 not found 페이지</div>
   );
 }
 

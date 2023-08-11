@@ -1,5 +1,11 @@
-import { Game } from "./Game.model";
-import { GameTemplate } from "./GameTemplate.model";
+import { type } from 'os';
+import { Game } from './Game.model';
+import { GameTemplate } from './GameTemplate.model';
+
+type Links = {
+  name: string;
+  url: string;
+};
 
 export class Pub {
   readonly id: string;
@@ -8,7 +14,7 @@ export class Pub {
   address: string;
   lat: number;
   lon: number;
-  links: Object[];
+  links: Links[];
   photos: string[];
   days: Object;
   templates: GameTemplate[];
@@ -21,7 +27,7 @@ export class Pub {
     address: string,
     lat: number,
     lon: number,
-    links: Object[],
+    links: Links[],
     photos: string[],
     days: Object,
     templates: GameTemplate[],
@@ -72,20 +78,20 @@ export class Pub {
 
   static fromData(data: any): Pub {
     try {
-      const id: string = data["id"];
-      const name: string = data["name"];
-      const phone: string = data["phone"];
-      const address: string = data["address"];
+      const id: string = data['id'];
+      const name: string = data['name'];
+      const phone: string = data['phone'];
+      const address: string = data['address'];
       let lat: number = 0;
       let lon: number = 0;
-      if (data["coordinate"] !== undefined) {
-        lat = data["coordinate"]["lat"] ?? 0;
-        lon = data["coordinate"]["lon"] ?? 0;
+      if (data['coordinate'] !== undefined) {
+        lat = data['coordinate']['lat'] ?? 0;
+        lon = data['coordinate']['lon'] ?? 0;
       }
-      const links: Object[] = data["links"];
-      const photos: string[] = data["photos"];
-      const days: Object = data["days"];
-      const templates: GameTemplate[] = (data["templates"] as []).map((v) =>
+      const links: Links[] = data['links'];
+      const photos: string[] = data['photos'];
+      const days: Object = data['days'];
+      const templates: GameTemplate[] = (data['templates'] as []).map((v) =>
         GameTemplate.fromData(v)
       );
       //   const games: Game[] = (data["games"] as []).map((v) => Game.fromData(v));
@@ -105,7 +111,7 @@ export class Pub {
       );
     } catch (error) {
       console.log(`[Pub Model] fromData e: ${error}`);
-      return new Pub("", "", "", "", 0, 0, [], [], {}, [], []);
+      return new Pub('', '', '', '', 0, 0, [], [], {}, [], []);
     }
   }
 }

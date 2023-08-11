@@ -1,21 +1,22 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import "./index.css";
-import reportWebVitals from "./reportWebVitals";
-import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
-import HomePage from "./page/home/HomePage";
-import QuotePage from "./page/quote/QuotePage";
-import PokerCalPage from "./page/poker_cal/PokerCalPage";
-import NotFound from "./page/404";
-import { Header } from "./page/Header";
-import HoldemBase from "./page/holdem_base/holdem_base";
-import { HoldemPubPage } from "./page/holdem_pub/HoldemPubPage";
-import { Provider } from "react-redux";
-import { store } from "./store/store";
-import firebase from "firebase/compat/app";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import reportWebVitals from './reportWebVitals';
+import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
+import HomePage from './page/home/HomePage';
+import QuotePage from './page/quote/QuotePage';
+import PokerCalPage from './page/poker_cal/PokerCalPage';
+import NotFound from './page/404';
+import { Header } from './page/Header';
+import HoldemBase from './page/holdem_base/holdem_base';
+import { HoldemPubPage } from './page/holdem_pub/HoldemPubPage';
+import { Provider } from 'react-redux';
+import { store } from './store/store';
+import firebase from 'firebase/compat/app';
+import HoldemPubOnePage from './page/holdem_pub/pub_page/HoldemPubOnePage';
 
 const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
+  document.getElementById('root') as HTMLElement
 );
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -43,6 +44,10 @@ root.render(
               <Route path="/quote" element={<QuotePage />}></Route>
               <Route path="/poker-cal" element={<PokerCalPage />}></Route>
               <Route path="/holdem-pub" element={<HoldemPubPage />}></Route>
+              <Route
+                path="/holdem-pub/detail/:id"
+                element={<HoldemPubOnePage />}
+              ></Route>
               <Route path="*" element={<NotFound />}></Route>
             </Routes>
           </BrowserRouter>
