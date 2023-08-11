@@ -139,10 +139,10 @@ const PokerCalPage = () => {
   }, [communityCards, players]);
 
   return (
-    <div className="container flex flex-col justify-center mx-auto">
-      <div className="top flex flex-col justify-center">
-        <div className="text-center text-4xl my-4">포커 계산기</div>
-        <div className="text-center text-2xl my-4">커뮤니티 카드</div>
+    <div className="flex flex-col mx-auto">
+      <div className="flex flex-col mx-auto">
+        <div className="text-center text-4xl my-2">포커 계산기</div>
+        <div className="text-center text-2xl my-2">커뮤니티 카드</div>
         <CommunityCardPart
           communityCards={communityCards}
           clickFunc={(cardValue: any, cardIndex: any) => {
@@ -175,7 +175,7 @@ const PokerCalPage = () => {
           }}
         />
       </div>
-      <div className="middle px-4">
+      <div className="middle px-4 mx-auto">
         {players.map((v, i) => {
           const detail = getHandDetail(v.hand);
           return (
