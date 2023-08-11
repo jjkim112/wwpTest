@@ -1,12 +1,11 @@
-import { Pub } from '../../../domain/Pub.model';
-import { useState, useEffect } from 'react';
-import { AiFillPhone, AiFillEnvironment } from 'react-icons/ai';
-import { AppDispatch, RootState } from '../../../store/store';
-import { useDispatch, useSelector } from 'react-redux';
-import { DataService } from '../../../data/DataService';
-import { refreshGames } from '../../../reducer/gameSlice';
-import { Game } from '../../../domain/Game.model';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Pub } from "../../../domain/Pub.model";
+import { useState, useEffect } from "react";
+import { AiFillPhone, AiFillEnvironment } from "react-icons/ai";
+import { AppDispatch, RootState } from "../../../store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { DataService } from "../../../data/DataService";
+import { refreshGames } from "../../../reducer/gameSlice";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function HoldemPubOnePage() {
   const id = useParams().id;
@@ -36,7 +35,7 @@ export default function HoldemPubOnePage() {
         <button
           className="border-2 bg-blue-700 text-black font-bold p-3 rounded-lg "
           onClick={() => {
-            navigate('/holdem-pub');
+            navigate("/holdem-pub");
           }}
         >
           ⬅️ 돌아가기
@@ -89,8 +88,8 @@ export default function HoldemPubOnePage() {
       <div className="w-full h-full flex flex-col justify-center  text-center p-10">
         <div> 잘못된 페인지 접근 입니다.</div>
         <br />
-        <button className="bg-white" onClick={() => navigate('/holdem-pub')}>
-          이전페이지로{' '}
+        <button className="bg-white" onClick={() => navigate("/holdem-pub")}>
+          이전페이지로{" "}
         </button>
       </div>
     );

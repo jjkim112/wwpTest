@@ -63,10 +63,6 @@ const PokerCalPage = () => {
       return prev + curr;
     });
   };
-
-  const remainCards = useSelector(
-    (state: RootState) => state.pokerCal.remainCards
-  );
   const communityCards = useSelector(
     (state: RootState) => state.pokerCal.communityCards
   );
@@ -150,6 +146,12 @@ const PokerCalPage = () => {
         <CommunityCardPart
           communityCards={communityCards}
           clickFunc={(cardValue: any, cardIndex: any) => {
+            for (let i: number = 0; i <= cardIndex - 1; i++) {
+              if (!isCard(communityCards[i])) {
+                return;
+              }
+            }
+
             setDialogSelCard(cardValue);
             dialogInputSetFunc((targetCard: any) => {
               var delCard = "";

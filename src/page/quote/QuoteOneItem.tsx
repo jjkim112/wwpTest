@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import './quote.css';
+import { useState } from "react";
+import "./quote.css";
 type QuoteOneItemProps = {
   pokerQuote: string;
   lifeQuote: string;

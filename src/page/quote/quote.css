@@ -1,24 +1,33 @@
-.oneQuote {}
+.oneQuote {
+}
 
-.onequote :hover~.pokerQuote {
+.onequote :hover ~ .pokerQuote {
   display: none;
 }
 
-.onequote :hover~.lifeQuote {
+.onequote :hover ~ .lifeQuote {
   display: inline-block;
 }
 
 .pokerQuote {
-  display: inline-block;
-  padding: 4px 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 300px;
+  height: 70px;
   border-radius: 20px;
   background-color: white;
   color: black;
 }
 
 .lifeQuote {
-  display: inline-block;
-  padding: 4px 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 300px;
+  height: 70px;
   border-radius: 20px;
   border: solid 2px red;
   background-color: yellow;
