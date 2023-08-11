@@ -110,7 +110,7 @@ export default function HoldemPubOnePage() {
                             (templatesValue, templatesIndex) =>
                               templatesValue.id === gamesValue ? (
                                 <div key={templatesIndex} className="py-10">
-                                  <div>{templatesValue.title}</div>
+                                  <div className="">{templatesValue.title}</div>
                                   <div>{templatesValue.subTitle}</div>
                                   <div>{templatesValue.info}</div>
                                 </div>

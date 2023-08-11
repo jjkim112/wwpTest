@@ -1,61 +1,59 @@
-import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
-import { wait } from "@testing-library/user-event/dist/utils/misc/wait";
-import { DataService } from "../data/DataService";
-import type { PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, current } from '@reduxjs/toolkit';
+import type { PayloadAction } from '@reduxjs/toolkit';
 
 const wholeCard: string[] = [
-  "sa",
-  "s2",
-  "s3",
-  "s4",
-  "s5",
-  "s6",
-  "s7",
-  "s8",
-  "s9",
-  "st",
-  "sj",
-  "sq",
-  "sk",
-  "da",
-  "d2",
-  "d3",
-  "d4",
-  "d5",
-  "d6",
-  "d7",
-  "d8",
-  "d9",
-  "dt",
-  "dj",
-  "dq",
-  "dk",
-  "ca",
-  "c2",
-  "c3",
-  "c4",
-  "c5",
-  "c6",
-  "c7",
-  "c8",
-  "c9",
-  "ct",
-  "cj",
-  "cq",
-  "ck",
-  "ha",
-  "h2",
-  "h3",
-  "h4",
-  "h5",
-  "h6",
-  "h7",
-  "h8",
-  "h9",
-  "ht",
-  "hj",
-  "hq",
-  "hk",
+  'sa',
+  's2',
+  's3',
+  's4',
+  's5',
+  's6',
+  's7',
+  's8',
+  's9',
+  'st',
+  'sj',
+  'sq',
+  'sk',
+  'da',
+  'd2',
+  'd3',
+  'd4',
+  'd5',
+  'd6',
+  'd7',
+  'd8',
+  'd9',
+  'dt',
+  'dj',
+  'dq',
+  'dk',
+  'ca',
+  'c2',
+  'c3',
+  'c4',
+  'c5',
+  'c6',
+  'c7',
+  'c8',
+  'c9',
+  'ct',
+  'cj',
+  'cq',
+  'ck',
+  'ha',
+  'h2',
+  'h3',
+  'h4',
+  'h5',
+  'h6',
+  'h7',
+  'h8',
+  'h9',
+  'ht',
+  'hj',
+  'hq',
+  'hk',
 ];
 
 const isCard = (value: string): boolean => {
@@ -70,29 +68,13 @@ const isRealHand = (hand: string[]): boolean => {
   return false;
 };
 
-const getRealHands = (hands: string[][]): string[][] => {
-  return hands.filter((hand: string[], _: number) => {
-    return isRealHand(hand);
-  });
-};
-class OnePlayer {
+export class OnePlayer {
   hand: string[];
   constructor(hand: string[]) {
     this.hand = hand;
   }
   get clone() {
     return new OnePlayer(Array.from(this.hand));
-  }
-}
-
-class detailInfo {
-  hand: any;
-  wins: any;
-  ties: any;
-  constructor(hand: any, wins: any, ties: any) {
-    this.hand = hand;
-    this.wins = wins;
-    this.ties = ties;
   }
 }
 
@@ -104,12 +86,12 @@ export interface PokerCalState {
 
 const initialState: PokerCalState = {
   remainCards: Array.from(wholeCard),
-  players: [new OnePlayer(["", ""]), new OnePlayer(["", ""])],
-  communityCards: ["", "", "", "", ""],
+  players: [new OnePlayer(['', '']), new OnePlayer(['', ''])],
+  communityCards: ['', '', '', '', ''],
 };
 
 export const pokerCalSlice = createSlice({
-  name: "pokerCal",
+  name: 'pokerCal',
   initialState,
   reducers: {
     updatePlayerCards: (state, action: PayloadAction<OnePlayer[]>) => {

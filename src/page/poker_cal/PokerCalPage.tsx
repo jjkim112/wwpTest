@@ -8,97 +8,12 @@ import CardSetDialog from "./CardSetDialog";
 import { AppDispatch, RootState } from "../../store/store";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  OnePlayer,
   refreshPokerCal,
   updateCommunitCards,
   updatePlayerCards,
 } from "../../reducer/pokerCalSlice";
 
-const shapes: any = {
-  s: "♠️",
-  d: "♦️",
-  c: "♣️",
-  h: "♥️",
-};
-
-const numbers: any = {
-  2: "2",
-  3: "3",
-  4: "4",
-  5: "5",
-  6: "6",
-  7: "7",
-  8: "8",
-  9: "9",
-  t: "10",
-  j: "J",
-  q: "Q",
-  k: "K",
-  a: "A",
-};
-const wholeCard: any = [
-  "sa",
-  "s2",
-  "s3",
-  "s4",
-  "s5",
-  "s6",
-  "s7",
-  "s8",
-  "s9",
-  "st",
-  "sj",
-  "sq",
-  "sk",
-  "da",
-  "d2",
-  "d3",
-  "d4",
-  "d5",
-  "d6",
-  "d7",
-  "d8",
-  "d9",
-  "dt",
-  "dj",
-  "dq",
-  "dk",
-  "ca",
-  "c2",
-  "c3",
-  "c4",
-  "c5",
-  "c6",
-  "c7",
-  "c8",
-  "c9",
-  "ct",
-  "cj",
-  "cq",
-  "ck",
-  "ha",
-  "h2",
-  "h3",
-  "h4",
-  "h5",
-  "h6",
-  "h7",
-  "h8",
-  "h9",
-  "ht",
-  "hj",
-  "hq",
-  "hk",
-];
-
-class OnePlayer {
-  hand: any;
-  constructor(hand: any) {
-    this.hand = hand;
-  }
-  get clone() {
-    return new OnePlayer(Array.from(this.hand));
-  }
-}
 class detailInfo {
   hand: any;
   wins: any;
@@ -148,10 +63,6 @@ const PokerCalPage = () => {
       return prev + curr;
     });
   };
-
-  const remainCards = useSelector(
-    (state: RootState) => state.pokerCal.remainCards
-  );
   const communityCards = useSelector(
     (state: RootState) => state.pokerCal.communityCards
   );
@@ -191,6 +102,7 @@ const PokerCalPage = () => {
       ...realHands.reduce((p: any, c: any) => [...p, ...c]),
       ...communityCards,
     ];
+
     var process = 0;
     for (let index = 0; index < communityCards.length; index++) {
       const cardStr = communityCards[index];
@@ -221,31 +133,25 @@ const PokerCalPage = () => {
   };
 
   useEffect(() => {
-    console.log("asodijasdoifasdfoij");
     setTimeout(() => {
       refreshHandDetails();
     });
   }, [communityCards, players]);
 
   return (
-    <div className="container flex flex-col justify-center mx-auto">
-      <div className="top flex flex-col justify-center">
-        <div className="text-center text-4xl my-4">포커 계산기</div>
-        <div className="text-center text-2xl my-4">커뮤니티 카드</div>
-        <div>remain: {remainCards.length}</div>
-        <div>communityCards: {communityCards.map((v) => ` (${v}) `)}</div>
-        <div>
-          plyers({players.length}) :{" "}
-          {players.map((v) => ` [${v.hand.map((v) => ` (${v}) `)}] `)}
-        </div>
-        <div className="w-40 flex flex-wrap">
-          {remainCards.map((v) => {
-            return <div className="mx-1">{v}</div>;
-          })}
-        </div>
+    <div className="flex flex-col mx-auto">
+      <div className="flex flex-col mx-auto">
+        <div className="text-center text-4xl my-2">포커 계산기</div>
+        <div className="text-center text-2xl my-2">커뮤니티 카드</div>
         <CommunityCardPart
           communityCards={communityCards}
           clickFunc={(cardValue: any, cardIndex: any) => {
+            for (let i: number = 0; i <= cardIndex - 1; i++) {
+              if (!isCard(communityCards[i])) {
+                return;
+              }
+            }
+
             setDialogSelCard(cardValue);
             dialogInputSetFunc((targetCard: any) => {
               var delCard = "";
@@ -269,7 +175,7 @@ const PokerCalPage = () => {
           }}
         />
       </div>
-      <div className="middle px-4">
+      <div className="middle px-4 mx-auto">
         {players.map((v, i) => {
           const detail = getHandDetail(v.hand);
           return (
