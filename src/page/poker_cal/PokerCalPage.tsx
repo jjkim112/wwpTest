@@ -5,6 +5,13 @@ import { json } from "react-router-dom";
 import Card from "../../component/Card";
 import "./style.css";
 import CardSetDialog from "./CardSetDialog";
+import { AppDispatch, RootState } from "../../store/store";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  refreshPokerCal,
+  updateCommunitCards,
+  updatePlayerCards,
+} from "../../reducer/pokerCalSlice";
 
 const shapes: any = {
   s: "♠️",
@@ -88,6 +95,9 @@ class OnePlayer {
   constructor(hand: any) {
     this.hand = hand;
   }
+  get clone() {
+    return new OnePlayer(Array.from(this.hand));
+  }
 }
 class detailInfo {
   hand: any;
@@ -120,7 +130,7 @@ const isRealHand = (hand: any) => {
   }
   return false;
 };
-const getRealHands = (hands: any) => {
+const getRealHands = (hands: any): any[] => {
   return hands.filter((hand: any, _: any) => {
     return isRealHand(hand);
   });
@@ -138,26 +148,19 @@ const PokerCalPage = () => {
       return prev + curr;
     });
   };
-  const [selPlayers, setSelPlayers] = useState([
-    new OnePlayer(["s5", "da"]),
-    new OnePlayer(["h5", "ha"]),
-    new OnePlayer(["d2", "dk"]),
-    new OnePlayer(["c2", "ck"]),
-  ]);
-  const [communityCards, setCommunityCards] = useState(["", "", "", "", ""]);
+
+  const remainCards = useSelector(
+    (state: RootState) => state.pokerCal.remainCards
+  );
+  const communityCards = useSelector(
+    (state: RootState) => state.pokerCal.communityCards
+  );
+  const players = useSelector((state: RootState) => state.pokerCal.players);
+  const dispatch = useDispatch<AppDispatch>();
+
   const [handDetails, setHandDetails] = useState([]);
 
   var [dialogOpen, setDialogOpen] = useState(false);
-  var [pickCards, setPickCards] = useState([
-    "s5",
-    "da",
-    "h5",
-    "ha",
-    "d2",
-    "dk",
-    "c2",
-    "ck",
-  ]);
 
   var [dialogSelCard, setDialogSelCard] = useState("");
 
@@ -179,8 +182,11 @@ const PokerCalPage = () => {
   };
 
   const refreshHandDetails = () => {
-    const realHands = getRealHands(selPlayers.map((v, i) => v.hand));
-    // console.log("prev= " + prevHash);
+    const realHands = getRealHands(players.map((v, i) => v.hand));
+    if (realHands.length < 2) {
+      return;
+    }
+
     const cardSerialize = [
       ...realHands.reduce((p: any, c: any) => [...p, ...c]),
       ...communityCards,
@@ -203,11 +209,8 @@ const PokerCalPage = () => {
       }
     }
 
-    // console.log(cardSerialize);
-    // console.log(toCardHash(cardSerialize));
     if (toCardHash(cardSerialize) != prevHash) {
       prevHash = toCardHash(cardSerialize);
-      // console.log("prev= " + prevHash);
       const list = getResult(realHands, communityCards);
       setHandDetails(
         list.map((v: any, i: any) => {
@@ -218,25 +221,28 @@ const PokerCalPage = () => {
   };
 
   useEffect(() => {
-    // refreshHandDetails(); // 이게 실행되고, useState가 업데이트 됨!!
+    console.log("asodijasdoifasdfoij");
     setTimeout(() => {
       refreshHandDetails();
     });
-  }, [communityCards, selPlayers]);
-
-  useEffect(() => {
-    // console.log(selPlayers);
-  }, [selPlayers]);
-
-  useEffect(() => {
-    // console.log(handDetails);
-  }, [handDetails]);
+  }, [communityCards, players]);
 
   return (
     <div className="container flex flex-col justify-center mx-auto">
       <div className="top flex flex-col justify-center">
         <div className="text-center text-4xl my-4">포커 계산기</div>
         <div className="text-center text-2xl my-4">커뮤니티 카드</div>
+        <div>remain: {remainCards.length}</div>
+        <div>communityCards: {communityCards.map((v) => ` (${v}) `)}</div>
+        <div>
+          plyers({players.length}) :{" "}
+          {players.map((v) => ` [${v.hand.map((v) => ` (${v}) `)}] `)}
+        </div>
+        <div className="w-40 flex flex-wrap">
+          {remainCards.map((v) => {
+            return <div className="mx-1">{v}</div>;
+          })}
+        </div>
         <CommunityCardPart
           communityCards={communityCards}
           clickFunc={(cardValue: any, cardIndex: any) => {
@@ -250,38 +256,21 @@ const PokerCalPage = () => {
                 delCard = cardValue;
                 addCard = targetCard;
               }
+              var temp = Array.from(communityCards);
+              if (targetCard == cardValue) {
+                temp[cardIndex] = "";
+              } else {
+                temp[cardIndex] = targetCard;
+              }
 
-              setCommunityCards((prevCommunityCards) => {
-                var temp = [...prevCommunityCards];
-                if (targetCard == cardValue) {
-                  temp[cardIndex] = "";
-                } else {
-                  temp[cardIndex] = targetCard;
-                }
-                return temp;
-              });
-
-              setPickCards((prevPickCards) => {
-                var index = -1;
-                if (delCard != "") {
-                  index = prevPickCards.indexOf(delCard);
-                  if (index > -1) {
-                    prevPickCards.splice(index, 1);
-                  }
-                }
-                index = -1;
-                if (addCard != "") {
-                  prevPickCards.push(addCard);
-                }
-                return prevPickCards;
-              });
+              dispatch(updateCommunitCards(temp));
             });
             setDialogOpen(true);
           }}
         />
       </div>
       <div className="middle px-4">
-        {selPlayers.map((v, i) => {
+        {players.map((v, i) => {
           const detail = getHandDetail(v.hand);
           return (
             <OnePlayerPart
@@ -299,59 +288,27 @@ const PokerCalPage = () => {
                     delCard = cardValue;
                     addCard = targetCard;
                   }
-                  setSelPlayers((prevPlayers) => {
-                    var temp = [...prevPlayers];
-                    if (targetCard == cardValue) {
-                      temp[i].hand[handIndex] = "";
-                    } else {
-                      temp[i].hand[handIndex] = targetCard;
-                    }
-                    return temp;
-                  });
-                  setPickCards((prevPickCards) => {
-                    var index = -1;
-                    if (delCard != "") {
-                      index = prevPickCards.indexOf(delCard);
-                      if (index > -1) {
-                        prevPickCards.splice(index, 1);
-                      }
-                    }
-                    index = -1;
-                    if (addCard != "") {
-                      prevPickCards.push(addCard);
-                    }
-                    return prevPickCards;
-                  });
+
+                  var tempList: OnePlayer[] = Array.from(
+                    players.map((v) => v.clone)
+                  );
+
+                  if (targetCard == cardValue) {
+                    tempList[i].hand[handIndex] = "";
+                  } else {
+                    tempList[i].hand[handIndex] = targetCard;
+                  }
+                  dispatch(updatePlayerCards(tempList));
                 });
                 setDialogOpen(true);
               }}
               delFunc={() => {
                 console.log("del func");
-                const card1 = selPlayers[i].hand[0];
-                const card2 = selPlayers[i].hand[1];
-
-                setSelPlayers((prevPlayers) => {
-                  var temp = [...prevPlayers];
-                  temp.splice(i, 1);
-                  return temp;
-                });
-                setPickCards((prevPickCards) => {
-                  var temp = [...prevPickCards];
-                  var index = -1;
-                  if (card1 != "") {
-                    index = prevPickCards.indexOf(card1);
-                    if (index > -1) {
-                      prevPickCards.splice(index, 1);
-                    }
-                  }
-                  if (card2 != "") {
-                    index = prevPickCards.indexOf(card2);
-                    if (index > -1) {
-                      prevPickCards.splice(index, 1);
-                    }
-                  }
-                  return temp;
-                });
+                const card1 = players[i].hand[0];
+                const card2 = players[i].hand[1];
+                var temp = Array.from(players.map((v) => v.clone));
+                temp.splice(i, 1);
+                dispatch(updatePlayerCards(temp));
               }}
             />
           );
@@ -360,17 +317,13 @@ const PokerCalPage = () => {
 
       <div className="w-full mb-2">
         <div className=" flex justify-center ">
-          <ActionPart
-            setSelPlayers={setSelPlayers}
-            setCommunityCards={setCommunityCards}
-          />
+          <ActionPart players={players} />
         </div>
       </div>
       {dialogOpen && (
         <CardSetDialog
           cardSetFunc={setCardFunc}
           setDialogOpen={setDialogOpen}
-          pickCards={pickCards}
           selCard={dialogSelCard}
         />
       )}
@@ -397,23 +350,32 @@ const CommunityCardPart = ({ communityCards, clickFunc }: any) => {
   );
 };
 
-const ActionPart = ({ setSelPlayers, setCommunityCards }: any) => {
+interface ActionPartProps {
+  players: OnePlayer[];
+}
+
+const ActionPart = ({ players }: ActionPartProps) => {
+  const dispatch = useDispatch<AppDispatch>();
   return (
     <div className="flex justify-center text-center ">
       <div
         className="flex justify-center text-center items-center border-2 w-24 h-12"
         onClick={() => {
-          setSelPlayers((prev: any) => {
-            var temp = [...prev];
-            temp.push(new OnePlayer(["", ""]));
-            return temp;
-          });
+          var temp = Array.from(players.map((v) => v.clone));
+          temp.push(new OnePlayer(["", ""]));
+
+          dispatch(updatePlayerCards(temp));
         }}
       >
         추가
       </div>
       <div className="mx-8"></div>
-      <div className="flex justify-center text-center items-center border-2 w-24 h-12">
+      <div
+        className="flex justify-center text-center items-center border-2 w-24 h-12"
+        onClick={() => {
+          dispatch(refreshPokerCal());
+        }}
+      >
         리셋
       </div>
     </div>

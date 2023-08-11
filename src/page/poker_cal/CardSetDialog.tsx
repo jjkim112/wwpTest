@@ -1,20 +1,24 @@
 import dialog from "./dialog.module.css";
 import basic from "../../utils/basic.json";
 import CardSimple from "../../component/CardSimple";
+import { AppDispatch, RootState } from "../../store/store";
+import { useDispatch, useSelector } from "react-redux";
 
 type CardSetDialogProps = {
   cardSetFunc: (cardValue: string) => void;
   setDialogOpen: (isOpen: boolean) => void;
-  pickCards: string[];
   selCard: string;
 };
 
 const CardSetDialog: React.FC<CardSetDialogProps> = ({
   cardSetFunc,
   setDialogOpen,
-  pickCards,
   selCard,
 }) => {
+  const remainCards = useSelector(
+    (state: RootState) => state.pokerCal.remainCards
+  );
+
   const closeModal = () => {
     setDialogOpen(false);
   };
@@ -32,35 +36,6 @@ const CardSetDialog: React.FC<CardSetDialogProps> = ({
           X
         </button>
         <div className="flex flex-col justify-center">
-          {/* {basic.shapeList.map((shape, index) => {
-            return (
-              <div className="flex" key={`${index}_${shape}`}>
-                {basic.numList.map((v, i) => {
-                  return (
-                    <div
-                      key={`${index}_${i}`}
-                      onClick={() => {
-                        if (!pickCards.includes(`${shape}${v}`)) {
-                          clickNum(`${shape}${v}`);
-                        } else {
-                          if (selCard === `${shape}${v}`) {
-                            clickNum(`${shape}${v}`);
-                          }
-                        }
-                      }}
-                    >
-                      <CardSimple
-                        isPick={pickCards.includes(`${shape}${v}`)}
-                        shape={shape}
-                        number={v}
-                        isOriginCard={selCard === `${shape}${v}`}
-                      />
-                    </div>
-                  );
-                })}
-              </div>
-            );
-          })} */}
           {basic.numList.map((num, index) => {
             return (
               <div className="flex" key={`${index}_${num}`}>
@@ -69,7 +44,7 @@ const CardSetDialog: React.FC<CardSetDialogProps> = ({
                     <div
                       key={`${index}_${i}`}
                       onClick={() => {
-                        if (!pickCards.includes(`${shape}${num}`)) {
+                        if (remainCards.includes(`${shape}${num}`)) {
                           clickNum(`${shape}${num}`);
                         } else {
                           if (selCard === `${shape}${num}`) {
@@ -79,7 +54,7 @@ const CardSetDialog: React.FC<CardSetDialogProps> = ({
                       }}
                     >
                       <CardSimple
-                        isPick={pickCards.includes(`${shape}${num}`)}
+                        isPick={!remainCards.includes(`${shape}${num}`)}
                         shape={shape}
                         number={num}
                         isOriginCard={selCard === `${shape}${num}`}
