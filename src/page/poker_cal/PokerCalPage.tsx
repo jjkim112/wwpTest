@@ -1,86 +1,86 @@
-import { useContext, useEffect, useRef, useState } from 'react';
-import basic from '../../utils/basic.json';
-import { getResult } from '../../utils/poker_func';
-import { json } from 'react-router-dom';
-import Card from '../../component/Card';
-import './style.css';
-import CardSetDialog from './CardSetDialog';
+import { useContext, useEffect, useRef, useState } from "react";
+import basic from "../../utils/basic.json";
+import { getResult } from "../../utils/poker_func";
+import { json } from "react-router-dom";
+import Card from "../../component/Card";
+import "./style.css";
+import CardSetDialog from "./CardSetDialog";
 
 const shapes: any = {
-  s: '♠️',
-  d: '♦️',
-  c: '♣️',
-  h: '♥️',
+  s: "♠️",
+  d: "♦️",
+  c: "♣️",
+  h: "♥️",
 };
 
 const numbers: any = {
-  2: '2',
-  3: '3',
-  4: '4',
-  5: '5',
-  6: '6',
-  7: '7',
-  8: '8',
-  9: '9',
-  t: '10',
-  j: 'J',
-  q: 'Q',
-  k: 'K',
-  a: 'A',
+  2: "2",
+  3: "3",
+  4: "4",
+  5: "5",
+  6: "6",
+  7: "7",
+  8: "8",
+  9: "9",
+  t: "10",
+  j: "J",
+  q: "Q",
+  k: "K",
+  a: "A",
 };
 const wholeCard: any = [
-  'sa',
-  's2',
-  's3',
-  's4',
-  's5',
-  's6',
-  's7',
-  's8',
-  's9',
-  'st',
-  'sj',
-  'sq',
-  'sk',
-  'da',
-  'd2',
-  'd3',
-  'd4',
-  'd5',
-  'd6',
-  'd7',
-  'd8',
-  'd9',
-  'dt',
-  'dj',
-  'dq',
-  'dk',
-  'ca',
-  'c2',
-  'c3',
-  'c4',
-  'c5',
-  'c6',
-  'c7',
-  'c8',
-  'c9',
-  'ct',
-  'cj',
-  'cq',
-  'ck',
-  'ha',
-  'h2',
-  'h3',
-  'h4',
-  'h5',
-  'h6',
-  'h7',
-  'h8',
-  'h9',
-  'ht',
-  'hj',
-  'hq',
-  'hk',
+  "sa",
+  "s2",
+  "s3",
+  "s4",
+  "s5",
+  "s6",
+  "s7",
+  "s8",
+  "s9",
+  "st",
+  "sj",
+  "sq",
+  "sk",
+  "da",
+  "d2",
+  "d3",
+  "d4",
+  "d5",
+  "d6",
+  "d7",
+  "d8",
+  "d9",
+  "dt",
+  "dj",
+  "dq",
+  "dk",
+  "ca",
+  "c2",
+  "c3",
+  "c4",
+  "c5",
+  "c6",
+  "c7",
+  "c8",
+  "c9",
+  "ct",
+  "cj",
+  "cq",
+  "ck",
+  "ha",
+  "h2",
+  "h3",
+  "h4",
+  "h5",
+  "h6",
+  "h7",
+  "h8",
+  "h9",
+  "ht",
+  "hj",
+  "hq",
+  "hk",
 ];
 
 class OnePlayer {
@@ -126,7 +126,7 @@ const getRealHands = (hands: any) => {
   });
 };
 
-let prevHash = '';
+let prevHash = "";
 var setCardFunc = () => {}; // dialog props
 
 const PokerCalPage = () => {
@@ -139,27 +139,27 @@ const PokerCalPage = () => {
     });
   };
   const [selPlayers, setSelPlayers] = useState([
-    new OnePlayer(['s5', 'da']),
-    new OnePlayer(['h5', 'ha']),
-    new OnePlayer(['d2', 'dk']),
-    new OnePlayer(['c2', 'ck']),
+    new OnePlayer(["s5", "da"]),
+    new OnePlayer(["h5", "ha"]),
+    new OnePlayer(["d2", "dk"]),
+    new OnePlayer(["c2", "ck"]),
   ]);
-  const [communityCards, setCommunityCards] = useState(['', '', '', '', '']);
+  const [communityCards, setCommunityCards] = useState(["", "", "", "", ""]);
   const [handDetails, setHandDetails] = useState([]);
 
   var [dialogOpen, setDialogOpen] = useState(false);
   var [pickCards, setPickCards] = useState([
-    's5',
-    'da',
-    'h5',
-    'ha',
-    'd2',
-    'dk',
-    'c2',
-    'ck',
+    "s5",
+    "da",
+    "h5",
+    "ha",
+    "d2",
+    "dk",
+    "c2",
+    "ck",
   ]);
 
-  var [dialogSelCard, setDialogSelCard] = useState('');
+  var [dialogSelCard, setDialogSelCard] = useState("");
 
   var dialogInputSetFunc = (func: any) => {
     setCardFunc = func;
@@ -242,8 +242,8 @@ const PokerCalPage = () => {
           clickFunc={(cardValue: any, cardIndex: any) => {
             setDialogSelCard(cardValue);
             dialogInputSetFunc((targetCard: any) => {
-              var delCard = '';
-              var addCard = '';
+              var delCard = "";
+              var addCard = "";
               if (targetCard == cardValue) {
                 delCard = targetCard;
               } else {
@@ -254,7 +254,7 @@ const PokerCalPage = () => {
               setCommunityCards((prevCommunityCards) => {
                 var temp = [...prevCommunityCards];
                 if (targetCard == cardValue) {
-                  temp[cardIndex] = '';
+                  temp[cardIndex] = "";
                 } else {
                   temp[cardIndex] = targetCard;
                 }
@@ -263,14 +263,14 @@ const PokerCalPage = () => {
 
               setPickCards((prevPickCards) => {
                 var index = -1;
-                if (delCard != '') {
+                if (delCard != "") {
                   index = prevPickCards.indexOf(delCard);
                   if (index > -1) {
                     prevPickCards.splice(index, 1);
                   }
                 }
                 index = -1;
-                if (addCard != '') {
+                if (addCard != "") {
                   prevPickCards.push(addCard);
                 }
                 return prevPickCards;
@@ -291,8 +291,8 @@ const PokerCalPage = () => {
               clickFunc={(cardValue: any, handIndex: any) => {
                 setDialogSelCard(cardValue);
                 dialogInputSetFunc((targetCard: any) => {
-                  var delCard = '';
-                  var addCard = '';
+                  var delCard = "";
+                  var addCard = "";
                   if (targetCard == cardValue) {
                     delCard = targetCard;
                   } else {
@@ -302,7 +302,7 @@ const PokerCalPage = () => {
                   setSelPlayers((prevPlayers) => {
                     var temp = [...prevPlayers];
                     if (targetCard == cardValue) {
-                      temp[i].hand[handIndex] = '';
+                      temp[i].hand[handIndex] = "";
                     } else {
                       temp[i].hand[handIndex] = targetCard;
                     }
@@ -310,14 +310,14 @@ const PokerCalPage = () => {
                   });
                   setPickCards((prevPickCards) => {
                     var index = -1;
-                    if (delCard != '') {
+                    if (delCard != "") {
                       index = prevPickCards.indexOf(delCard);
                       if (index > -1) {
                         prevPickCards.splice(index, 1);
                       }
                     }
                     index = -1;
-                    if (addCard != '') {
+                    if (addCard != "") {
                       prevPickCards.push(addCard);
                     }
                     return prevPickCards;
@@ -326,7 +326,7 @@ const PokerCalPage = () => {
                 setDialogOpen(true);
               }}
               delFunc={() => {
-                console.log('del func');
+                console.log("del func");
                 const card1 = selPlayers[i].hand[0];
                 const card2 = selPlayers[i].hand[1];
 
@@ -338,13 +338,13 @@ const PokerCalPage = () => {
                 setPickCards((prevPickCards) => {
                   var temp = [...prevPickCards];
                   var index = -1;
-                  if (card1 != '') {
+                  if (card1 != "") {
                     index = prevPickCards.indexOf(card1);
                     if (index > -1) {
                       prevPickCards.splice(index, 1);
                     }
                   }
-                  if (card2 != '') {
+                  if (card2 != "") {
                     index = prevPickCards.indexOf(card2);
                     if (index > -1) {
                       prevPickCards.splice(index, 1);
@@ -405,7 +405,7 @@ const ActionPart = ({ setSelPlayers, setCommunityCards }: any) => {
         onClick={() => {
           setSelPlayers((prev: any) => {
             var temp = [...prev];
-            temp.push(new OnePlayer(['', '']));
+            temp.push(new OnePlayer(["", ""]));
             return temp;
           });
         }}
@@ -466,7 +466,7 @@ const OneCardDiv = ({ card, cardClickFunc }: any) => {
         // event.target.style.border = "none";
       }}
     >
-      <Card card={isCard(card) ? card : ''} width="80px" height="120px" />
+      <Card card={isCard(card) ? card : ""} width="80px" height="120px" />
     </div>
   );
 };

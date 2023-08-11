@@ -1,6 +1,6 @@
-import dialog from './dialog.module.css';
-import basic from '../../utils/basic.json';
-import CardSimple from '../../component/CardSimple';
+import dialog from "./dialog.module.css";
+import basic from "../../utils/basic.json";
+import CardSimple from "../../component/CardSimple";
 
 type CardSetDialogProps = {
   cardSetFunc: (cardValue: string) => void;
@@ -32,7 +32,7 @@ const CardSetDialog: React.FC<CardSetDialogProps> = ({
           X
         </button>
         <div className="flex flex-col justify-center">
-          {basic.shapeList.map((shape, index) => {
+          {/* {basic.shapeList.map((shape, index) => {
             return (
               <div className="flex" key={`${index}_${shape}`}>
                 {basic.numList.map((v, i) => {
@@ -54,6 +54,35 @@ const CardSetDialog: React.FC<CardSetDialogProps> = ({
                         shape={shape}
                         number={v}
                         isOriginCard={selCard === `${shape}${v}`}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          })} */}
+          {basic.numList.map((num, index) => {
+            return (
+              <div className="flex" key={`${index}_${num}`}>
+                {basic.shapeList.map((shape, i) => {
+                  return (
+                    <div
+                      key={`${index}_${i}`}
+                      onClick={() => {
+                        if (!pickCards.includes(`${shape}${num}`)) {
+                          clickNum(`${shape}${num}`);
+                        } else {
+                          if (selCard === `${shape}${num}`) {
+                            clickNum(`${shape}${num}`);
+                          }
+                        }
+                      }}
+                    >
+                      <CardSimple
+                        isPick={pickCards.includes(`${shape}${num}`)}
+                        shape={shape}
+                        number={num}
+                        isOriginCard={selCard === `${shape}${num}`}
                       />
                     </div>
                   );

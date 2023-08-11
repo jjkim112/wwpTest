@@ -1,5 +1,5 @@
-import styles from './CardSetDialog.module.css';
-import basic from '../utils/basic.json';
+import styles from "./CardSetDialog.module.css";
+import basic from "../utils/basic.json";
 interface Props {
   setCardFunc: (value: string) => void;
   setModalOpen: (value: boolean) => void;
