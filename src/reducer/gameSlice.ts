@@ -1,9 +1,9 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { wait } from "@testing-library/user-event/dist/utils/misc/wait";
-import { Pub } from "../domain/Pub.model";
-import { DataService } from "../data/DataService";
-import type { PayloadAction } from "@reduxjs/toolkit";
-import { Game } from "../domain/Game.model";
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { wait } from '@testing-library/user-event/dist/utils/misc/wait';
+import { Pub } from '../domain/Pub.model';
+import { DataService } from '../data/DataService';
+import type { PayloadAction } from '@reduxjs/toolkit';
+import { Game } from '../domain/Game.model';
 
 export interface GameState {
   games: Game[];
@@ -16,7 +16,7 @@ const initialState: GameState = {
 };
 
 export const gameSlice = createSlice({
-  name: "game",
+  name: 'game',
   initialState,
   reducers: {
     gameLoadingStart: (state) => {
@@ -26,6 +26,10 @@ export const gameSlice = createSlice({
       state.loading = false;
     },
     refreshGames: (state, action: PayloadAction<Game[]>) => {
+      // TODO 합쳐지는 방식으로 고쳐야함.
+      state.games = action.payload;
+    },
+    getOneGameData: (state, action: PayloadAction<Game[]>) => {
       // TODO 합쳐지는 방식으로 고쳐야함.
       state.games = action.payload;
     },
