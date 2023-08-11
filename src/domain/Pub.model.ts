@@ -1,4 +1,4 @@
-import { type } from 'os';
+import { OpenDay } from './Days.model';
 import { Game } from './Game.model';
 import { GameTemplate } from './GameTemplate.model';
 
@@ -16,7 +16,7 @@ export class Pub {
   lon: number;
   links: Links[];
   photos: string[];
-  days: Object;
+  days: OpenDay[];
   templates: GameTemplate[];
   games: Game[];
 
@@ -29,7 +29,7 @@ export class Pub {
     lon: number,
     links: Links[],
     photos: string[],
-    days: Object,
+    days: OpenDay[],
     templates: GameTemplate[],
     games: Game[]
   ) {
@@ -70,7 +70,7 @@ export class Pub {
       coordinate: { lat: this.lat, lon: this.lon },
       links: this.links,
       photos: this.photos,
-      days: this.days,
+      days: this.days.map((v) => v.toMap),
       templates: this.templates.map((v) => v.toMap),
       //   games: this.games.map((v) => v.toMap), <= sub collection
     };
@@ -90,7 +90,10 @@ export class Pub {
       }
       const links: Links[] = data['links'];
       const photos: string[] = data['photos'];
-      const days: Object = data['days'];
+      const days: OpenDay[] = (data['days'] as []).map((v) =>
+        OpenDay.fromData(v)
+      );
+
       const templates: GameTemplate[] = (data['templates'] as []).map((v) =>
         GameTemplate.fromData(v)
       );
@@ -111,7 +114,7 @@ export class Pub {
       );
     } catch (error) {
       console.log(`[Pub Model] fromData e: ${error}`);
-      return new Pub('', '', '', '', 0, 0, [], [], {}, [], []);
+      return new Pub('', '', '', '', 0, 0, [], [], [], [], []);
     }
   }
 }

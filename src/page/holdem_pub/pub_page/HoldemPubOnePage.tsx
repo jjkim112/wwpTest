@@ -1,12 +1,18 @@
 import { Pub } from '../../../domain/Pub.model';
 import { useState, useEffect } from 'react';
-import { AiFillPhone, AiFillEnvironment } from 'react-icons/ai';
+import {
+  AiFillPhone,
+  AiFillEnvironment,
+  AiFillCaretDown,
+  AiFillCaretUp,
+} from 'react-icons/ai';
 import { AppDispatch, RootState } from '../../../store/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { DataService } from '../../../data/DataService';
 import { refreshGames } from '../../../reducer/gameSlice';
 import { Game } from '../../../domain/Game.model';
 import { useNavigate, useParams } from 'react-router-dom';
+import { dividerClasses } from '@mui/material';
 
 export default function HoldemPubOnePage() {
   const id = useParams().id;
@@ -15,6 +21,15 @@ export default function HoldemPubOnePage() {
   const gamesData = useSelector((state: RootState) => state.game.games);
   const dispatch = useDispatch<AppDispatch>();
   let navigate = useNavigate();
+  const [visibility, setVisibility] = useState<boolean[]>(
+    new Array(7).fill(false)
+  );
+
+  const toggleVisibility = (index: number) => {
+    const newVisibility = [...visibility];
+    newVisibility[index] = !newVisibility[index];
+    setVisibility(newVisibility);
+  };
   const goToPubPage = async () => {
     pubsData.map((v, i) => {
       if (v.id === id) {
@@ -29,7 +44,7 @@ export default function HoldemPubOnePage() {
 
   useEffect(() => {
     goToPubPage();
-  });
+  }, []);
   if (pickPub != null) {
     return (
       <div key={`${pickPub.id}detail`} className="p-2 w-full text-white">
@@ -72,11 +87,49 @@ export default function HoldemPubOnePage() {
                 />
               </a>
             </div>
+            <div>요일 별 오픈 토너먼트</div>
+            <div className="py-2">
+              {pickPub.days.map((daysValue, daysIndex) => (
+                <div key={daysIndex} className="py-2">
+                  {visibility[daysIndex] ? (
+                    <h1 onClick={() => toggleVisibility(daysIndex)}>
+                      <AiFillCaretUp className="inline" />{' '}
+                      {`  ${daysValue.day}`}
+                    </h1>
+                  ) : (
+                    <h1 onClick={() => toggleVisibility(daysIndex)}>
+                      <AiFillCaretDown className="inline" />
+                      {`  ${daysValue.day}`}
+                    </h1>
+                  )}
+                  {visibility[daysIndex] &&
+                    daysValue.games.map((gamesValue, gamesIndex) => (
+                      <div key={gamesIndex}>
+                        <div>
+                          {pickPub.templates.map(
+                            (templatesValue, templatesIndex) =>
+                              templatesValue.id === gamesValue ? (
+                                <div key={templatesIndex} className="py-10">
+                                  <div>{templatesValue.title}</div>
+                                  <div>{templatesValue.subTitle}</div>
+                                  <div>{templatesValue.info}</div>
+                                </div>
+                              ) : (
+                                <div></div>
+                              )
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
+
         {gamesData.map((game, i) => {
           return (
-            <div>
+            <div key={i}>
               <div>{game.entry}</div>
               <div>{game.players.toString()}</div>
             </div>
