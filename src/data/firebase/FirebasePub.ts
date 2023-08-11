@@ -55,6 +55,7 @@ export class FirebasePub {
       return false;
     }
   };
+
   static addNewGame = async (
     pubId: string,
     newId: string,
@@ -95,7 +96,7 @@ export class FirebasePub {
         return false;
       }
     } catch (error) {
-      console.log(`[FirebasePub] addNewGame e: ${error}`);
+      console.log(`[FirebasePub] updatePub e: ${error}`);
       return false;
     }
   };
