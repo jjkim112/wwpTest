@@ -1,7 +1,7 @@
 .content {
   /* 모달창 크기 */
-  width: 60%;
-  height: 90%;
+  width: 250px;
+  height: 600px;
 
   /* 최상단 위치 */
   z-index: 999;
