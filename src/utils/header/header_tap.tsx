@@ -19,7 +19,7 @@ export const HeaderTap = ({ content, activeTab }: HeaderTapProps) => {
   return (
     <div>
       {content ? (
-        <div className="flex justify-center items-center  text-gray-50 py-3">
+        <div className="flex justify-center  text-gray-50 py-3 ">
           {content.map((tab, index) => (
             <button
               key={index}
@@ -27,7 +27,7 @@ export const HeaderTap = ({ content, activeTab }: HeaderTapProps) => {
                 activeHeaderTab === index
                   ? 'pb-1 border-b-2 border-blue-500'
                   : ''
-              } text-center`}
+              } text-center `}
               onClick={() => {
                 handleClickTab(index);
               }}

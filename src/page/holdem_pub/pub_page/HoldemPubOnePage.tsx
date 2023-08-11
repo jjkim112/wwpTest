@@ -10,10 +10,19 @@ import { AppDispatch, RootState } from '../../../store/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { DataService } from '../../../data/DataService';
 import { refreshGames } from '../../../reducer/gameSlice';
-import { Game } from '../../../domain/Game.model';
 import { useNavigate, useParams } from 'react-router-dom';
-import { dividerClasses } from '@mui/material';
-
+import { HeaderTap } from '../../../utils/header/header_tap';
+type Section = {
+  label: string;
+};
+const tabs: Section[] = [
+  {
+    label: '랭킹',
+  },
+  {
+    label: '정보',
+  },
+];
 export default function HoldemPubOnePage() {
   const id = useParams().id;
   const [pickPub, setPickPub] = useState<Pub | null>(null);
@@ -41,7 +50,7 @@ export default function HoldemPubOnePage() {
     const getGameData = await DataService.fetchGamesInfo(id!);
     dispatch(refreshGames(getGameData));
   };
-
+  const [activeHeaderTab, setActiveHeaderTab] = useState(0);
   useEffect(() => {
     goToPubPage();
   }, []);
@@ -87,43 +96,55 @@ export default function HoldemPubOnePage() {
                 />
               </a>
             </div>
-            <div>요일 별 오픈 토너먼트</div>
-            <div className="py-2">
-              {pickPub.days.map((daysValue, daysIndex) => (
-                <div key={daysIndex} className="py-2">
-                  {visibility[daysIndex] ? (
-                    <h1 onClick={() => toggleVisibility(daysIndex)}>
-                      <AiFillCaretUp className="inline" />{' '}
-                      {`  ${daysValue.day}`}
-                    </h1>
-                  ) : (
-                    <h1 onClick={() => toggleVisibility(daysIndex)}>
-                      <AiFillCaretDown className="inline" />
-                      {`  ${daysValue.day}`}
-                    </h1>
-                  )}
-                  {visibility[daysIndex] &&
-                    daysValue.games.map((gamesValue, gamesIndex) => (
-                      <div key={gamesIndex}>
-                        <div>
-                          {pickPub.templates.map(
-                            (templatesValue, templatesIndex) =>
-                              templatesValue.id === gamesValue ? (
-                                <div key={templatesIndex} className="py-10">
-                                  <div className="">{templatesValue.title}</div>
-                                  <div>{templatesValue.subTitle}</div>
-                                  <div>{templatesValue.info}</div>
-                                </div>
-                              ) : (
-                                <div></div>
-                              )
-                          )}
+            <>
+              <div>요일 별 오픈 토너먼트</div>
+              <div className="py-2">
+                {pickPub.days.map((daysValue, daysIndex) => (
+                  <div key={daysIndex} className="py-2">
+                    {visibility[daysIndex] ? (
+                      <h1 onClick={() => toggleVisibility(daysIndex)}>
+                        <AiFillCaretUp className="inline" />{' '}
+                        {`  ${daysValue.day}`}
+                      </h1>
+                    ) : (
+                      <h1 onClick={() => toggleVisibility(daysIndex)}>
+                        <AiFillCaretDown className="inline" />
+                        {`  ${daysValue.day}`}
+                      </h1>
+                    )}
+                    {visibility[daysIndex] &&
+                      daysValue.games.map((gamesValue, gamesIndex) => (
+                        <div key={gamesIndex}>
+                          <div>
+                            {pickPub.templates.map(
+                              (templatesValue, templatesIndex) =>
+                                templatesValue.id === gamesValue ? (
+                                  <div
+                                    key={templatesIndex}
+                                    className="flex flex-col justify-center text-center py-1 pb-4"
+                                  >
+                                    <div className="bg-slate-800 rounded-tr-md  rounded-tl-md py-4">
+                                      {templatesValue.title}
+                                    </div>
+                                    <div className="bg-slate-800 py-4">
+                                      {templatesValue.subTitle}
+                                    </div>
+                                    <div className="bg-slate-800 rounded-br-md  rounded-bl-md py-4">
+                                      {templatesValue.info}
+                                    </div>
+                                  </div>
+                                ) : (
+                                  <div></div>
+                                )
+                            )}
+                          </div>
                         </div>
-                      </div>
-                    ))}
-                </div>
-              ))}
-            </div>
+                      ))}
+                  </div>
+                ))}
+              </div>
+            </>
+            <HeaderTap content={tabs} activeTab={setActiveHeaderTab} />
           </div>
         </div>
 
