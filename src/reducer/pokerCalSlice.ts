@@ -1,6 +1,4 @@
 import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
-import { wait } from "@testing-library/user-event/dist/utils/misc/wait";
-import { DataService } from "../data/DataService";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
 const wholeCard: string[] = [
@@ -70,29 +68,13 @@ const isRealHand = (hand: string[]): boolean => {
   return false;
 };
 
-const getRealHands = (hands: string[][]): string[][] => {
-  return hands.filter((hand: string[], _: number) => {
-    return isRealHand(hand);
-  });
-};
-class OnePlayer {
+export class OnePlayer {
   hand: string[];
   constructor(hand: string[]) {
     this.hand = hand;
   }
   get clone() {
     return new OnePlayer(Array.from(this.hand));
-  }
-}
-
-class detailInfo {
-  hand: any;
-  wins: any;
-  ties: any;
-  constructor(hand: any, wins: any, ties: any) {
-    this.hand = hand;
-    this.wins = wins;
-    this.ties = ties;
   }
 }
 
