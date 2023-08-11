@@ -60,7 +60,7 @@ type TypeSelProps = {
 
 const TypeSel = ({ selPosition, setSelPosition }: TypeSelProps) => {
   return (
-    <div className="flex justify-center gap-4">
+    <div className="grid grid-cols-4 gap-1 text-xs">
       {positionList.map((v, i) => {
         return (
           <OneTypeBtn
@@ -105,7 +105,7 @@ type RangeChartImgProps = {
 const RangeChartImg = ({ selPosition }: RangeChartImgProps) => {
   return (
     <img
-      className="object-contain mt-10"
+      className=" object-contain mt-10"
       src={getImgPathFromPosition(selPosition)}
       alt=""
     />

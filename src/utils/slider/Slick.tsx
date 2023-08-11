@@ -57,8 +57,8 @@ function Slick({
       dots: true,
       infinite: loop,
       speed: speed,
-      slidesToShow: 3,
-      slidesToScroll: 3,
+      slidesToShow: 1,
+      slidesToScroll: 1,
       nextArrow: <SampleNextArrow />,
       prevArrow: <SamplePrevArrow />,
       autoplay: Boolean(autoplay),
@@ -68,8 +68,8 @@ function Slick({
         {
           breakpoint: 600, // 화면의 넓이가 600px 이상일 때
           settings: {
-            slidesToShow: 3,
-            slidesToScroll: 3,
+            slidesToShow: 1,
+            slidesToScroll: 1,
           },
         },
         {
@@ -84,7 +84,7 @@ function Slick({
     [autoplay, loop, speed]
   );
   return (
-    <div className={'relative'}>
+    <div className={'relative pb-10'}>
       <Slider {...settings}>{children}</Slider>
     </div>
   );

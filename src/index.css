@@ -14,6 +14,15 @@ body {
 
 }
 
+@media only screen and (max-width: 767px) {
+
+  /* 모바일 화면에서 적용될 스타일 코드 */
+  body {
+    width: 380px;
+    margin: 0 auto;
+  }
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;

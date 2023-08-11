@@ -12,16 +12,13 @@ const tabs: IntroductionTab[] = [
     label: '홈',
     mainLink: '/',
   },
+
   {
-    label: 'MapTest',
-    mainLink: '/MapTest',
-  },
-  {
-    label: '홀덤 게임 정보',
+    label: '홀덤 정보',
     mainLink: '/holdem-base',
   },
   {
-    label: '홀덤 지점',
+    label: '홀덤 펍/지점',
     mainLink: '/holdem-pub',
   },
 
@@ -50,7 +47,7 @@ export const Header = () => {
 
   return (
     <div className="bg-slate-800">
-      <div className="flex flex-col justify-center items-center bg-black pt-2 ">
+      <div className="flex flex-col justify-center items-center bg-black p-2 ">
         <div className="flex mb-4  text-gray-50  ">
           {tabs.map((tab, index) => (
             <button

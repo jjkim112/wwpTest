@@ -233,7 +233,7 @@ const PokerCalPage = () => {
   }, [handDetails]);
 
   return (
-    <div className="container mx-auto">
+    <div className="container flex flex-col justify-center mx-auto">
       <div className="top flex flex-col justify-center">
         <div className="text-center text-4xl my-4">포커 계산기</div>
         <div className="text-center text-2xl my-4">커뮤니티 카드</div>
@@ -280,7 +280,7 @@ const PokerCalPage = () => {
           }}
         />
       </div>
-      <div className="middle px-8">
+      <div className="middle px-4">
         {selPlayers.map((v, i) => {
           const detail = getHandDetail(v.hand);
           return (
@@ -358,11 +358,13 @@ const PokerCalPage = () => {
         })}
       </div>
 
-      <div className="bottom">
-        <ActionPart
-          setSelPlayers={setSelPlayers}
-          setCommunityCards={setCommunityCards}
-        />
+      <div className="w-full mb-2">
+        <div className=" flex justify-center ">
+          <ActionPart
+            setSelPlayers={setSelPlayers}
+            setCommunityCards={setCommunityCards}
+          />
+        </div>
       </div>
       {dialogOpen && (
         <CardSetDialog
@@ -397,9 +399,9 @@ const CommunityCardPart = ({ communityCards, clickFunc }: any) => {
 
 const ActionPart = ({ setSelPlayers, setCommunityCards }: any) => {
   return (
-    <div className="flex">
+    <div className="flex justify-center text-center ">
       <div
-        className="border-2 w-24 h-12"
+        className="flex justify-center text-center items-center border-2 w-24 h-12"
         onClick={() => {
           setSelPlayers((prev: any) => {
             var temp = [...prev];
@@ -411,7 +413,9 @@ const ActionPart = ({ setSelPlayers, setCommunityCards }: any) => {
         추가
       </div>
       <div className="mx-8"></div>
-      <div className="border-2 w-24 h-12">리셋</div>
+      <div className="flex justify-center text-center items-center border-2 w-24 h-12">
+        리셋
+      </div>
     </div>
   );
 };
@@ -419,7 +423,7 @@ const ActionPart = ({ setSelPlayers, setCommunityCards }: any) => {
 const OnePlayerPart = ({ player, detail, clickFunc, delFunc }: any) => {
   return (
     <div className="flex items-center">
-      <div className="w-36 mx-4 my-2 flex justify-center items-center rounded-xl">
+      <div className="w-36 mx-2 my-2 flex justify-center items-center rounded-xl">
         <OneCardDiv
           card={player.hand[0]}
           cardClickFunc={() => {
@@ -439,10 +443,10 @@ const OnePlayerPart = ({ player, detail, clickFunc, delFunc }: any) => {
         <div>tie: {detail.ties}</div>
       </div>
       <div
-        className="ml-4 border-2 border-black hover:cursor-pointer"
+        className="mx-1 p-1 border-2 text-center border-black hover:cursor-pointer"
         onClick={delFunc}
       >
-        삭제버튼
+        삭제
       </div>
     </div>
   );

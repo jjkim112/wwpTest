@@ -28,18 +28,7 @@ const HomeTitle = () => {
     />
   );
 };
-const BtnHandRank = () => {
-  return <BasicBtn name="핸드 순위" route="/hand-range" />;
-};
-const BtnPreFlopRange = () => {
-  return <BasicBtn name="프리플랍 핸드 레인지" route="/pre-flop-range" />;
-};
-const BtnQuote = () => {
-  return <BasicBtn name="포커 명언" route="/quote" />;
-};
-const BtnPokerCalPage = () => {
-  return <BasicBtn name="포커 계산기" route="/poker-cal" />;
-};
+
 type BasicBtnProps = {
   name: string;
   route: string;

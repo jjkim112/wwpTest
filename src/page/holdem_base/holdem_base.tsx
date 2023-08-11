@@ -17,10 +17,10 @@ type Section = {
 function HoldemBase() {
   const tabs: Section[] = [
     {
-      label: '홀덤 펍 방문시',
+      label: '펍 방문시',
     },
     {
-      label: '홀덤 용어 정리',
+      label: '용어 정리',
     },
     {
       label: '핸드 순위',
@@ -56,9 +56,9 @@ export function HoldemBaseSel({ sel }: selProps): JSX.Element {
       return <PreFlopRangePage></PreFlopRangePage>;
     case '포커(족보) 랭킹':
       return <HandRankings></HandRankings>;
-    case '홀덤 펍 방문시':
+    case '펍 방문시':
       return <HoldemPubBase></HoldemPubBase>;
-    case '홀덤 용어 정리':
+    case '용어 정리':
       return <HoldemTermsBase></HoldemTermsBase>;
 
     default:

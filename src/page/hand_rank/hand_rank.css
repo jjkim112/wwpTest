@@ -4,8 +4,9 @@
   justify-content: center;
   align-content: center;
   gap: 1px;
-  grid-template-columns: repeat(13, 33px);
-  grid-template-rows: repeat(13, 33px);
+  font-size: 12px;
+  grid-template-columns: repeat(13, 1fr);
+  grid-template-rows: repeat(13, 1fr);
 }
 
 .notContainItem {
@@ -15,6 +16,7 @@
   background-color: rgba(150, 150, 150, 0.3);
   color: rgba(150, 150, 150, 0.8);
 }
+
 .containItem {
   display: flex;
   justify-content: center;
@@ -22,6 +24,7 @@
   background-color: red;
   color: white;
 }
+
 .containItemPocket {
   display: flex;
   justify-content: center;
