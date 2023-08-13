@@ -51,6 +51,7 @@ export default function HoldemPubOnePage() {
     dispatch(refreshGames(getGameData));
   };
   const [activeHeaderTab, setActiveHeaderTab] = useState(0);
+
   useEffect(() => {
     goToPubPage();
   }, []);
@@ -148,9 +149,17 @@ export default function HoldemPubOnePage() {
           </div>
         </div>
 
+        {
+          activeHeaderTab == 0 ?
+          <div>rank page</div>
+          :
+          <div>info page</div>
+        }
+
         {gamesData.map((game, i) => {
           return (
             <div key={i}>
+              <div> 엔트리 : ({game.entry})</div>
               <div>{game.entry}</div>
               <div>{game.players.toString()}</div>
             </div>
