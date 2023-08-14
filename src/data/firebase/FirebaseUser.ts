@@ -4,6 +4,8 @@ import firebase from "firebase/compat/app";
 import "firebase/compat/firestore";
 import { Game, GamePlayerThumb } from "../../domain/Game.model";
 import { User } from "../../domain/User.model";
+import { UserGame } from "../../domain/UserGame.model";
+import { UserGameData } from "../../domain/UserGameData.model";
 
 export class FirebaseUser {
   static getWholeUserData = async (): Promise<User[]> => {
@@ -36,6 +38,66 @@ export class FirebaseUser {
       }
     } catch (error) {
       console.log(`[FirebaseUser] addNewUser e: ${error}`);
+      return false;
+    }
+  };
+
+  static updateUsersWithGame = async (
+    players: GamePlayerThumb[],
+    newId: string,
+    pubId: string,
+    gameTempId: string,
+    entry: number,
+    date: Date
+  ): Promise<boolean> => {
+    const firestore = firebase.firestore();
+    const userCol = firestore.collection("wwp_users");
+
+    try {
+      for (const onePlayer of players) {
+        const userDoc = userCol.doc(onePlayer.id);
+        const userDocSnapshot = await userDoc.get();
+
+        if (userDocSnapshot.exists) {
+          const userData = User.fromData(userDocSnapshot.data());
+          userData.games.push(
+            new UserGame(
+              new UserGameData(
+                date,
+                entry,
+                gameTempId,
+                onePlayer.prize,
+                onePlayer.rank
+              ),
+              newId,
+              pubId
+            )
+          );
+          await userDoc.update(userData.toMap);
+        } else {
+          await userDoc.set({
+            id: onePlayer.id,
+            nickname: onePlayer.id,
+            games: [
+              {
+                gameId: newId,
+                pubId: pubId,
+                datas: {
+                  date: date,
+                  entry: entry,
+                  gameTempId: gameTempId,
+                  prize: onePlayer.prize,
+                  rank: onePlayer.rank,
+                },
+              },
+            ],
+          });
+        }
+      }
+
+      return true;
+    } catch (error) {
+      console.log(`[FirebaseUser] updateUsersWithGame e: ${error}`);
       return false;
     }
   };

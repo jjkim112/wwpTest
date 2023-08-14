@@ -1,6 +1,12 @@
-import { useNavigate } from 'react-router-dom';
-import PokerCalPage from '../poker_cal/PokerCalPage';
-import QuotePage from '../quote/QuotePage';
+import { useNavigate } from "react-router-dom";
+import PokerCalPage from "../poker_cal/PokerCalPage";
+import QuotePage from "../quote/QuotePage";
+import { Game } from "../../domain/Game.model";
+import firebase from "firebase/compat/app";
+import "firebase/compat/firestore";
+import { User } from "../../domain/User.model";
+import { UserGame } from "../../domain/UserGame.model";
+import { UserGameData } from "../../domain/UserGameData.model";
 
 function HomePage() {
   return (
@@ -8,16 +14,78 @@ function HomePage() {
       className="min-w-screen min-h-screen bg-red-800 flex-col justify-center items-center"
       style={{
         backgroundImage: `url("/assets/images/background.png")`,
-        backgroundSize: '100% 100%',
-        backgroundPosition: 'center center',
-        backgroundRepeat: 'no-repeat',
+        backgroundSize: "100% 100%",
+        backgroundPosition: "center center",
+        backgroundRepeat: "no-repeat",
       }}
     >
+      <TestBtn />
       <HomeTitle />
       <QuotePage />
     </div>
   );
 }
+const TestBtn = () => {
+  const _testFunc = async () => {
+    const firestore = firebase.firestore();
+    const pubsCol = firestore.collection("wwp_pubs");
+    const pubsDocs = await pubsCol.get();
+
+    const userCol = firestore.collection("wwp_users");
+
+    for (const pubDoc of pubsDocs.docs) {
+      const pubGameCol = pubsCol.doc(pubDoc.id).collection("games");
+      const pubGameDocs = await pubGameCol.get();
+      for (const onePubGameDoc of pubGameDocs.docs) {
+        const oneGame: Game = Game.fromData(onePubGameDoc.data());
+        for (const player of oneGame.players) {
+          const playerDoc = userCol.doc(player.id);
+          const playerDocSnapshot = await playerDoc.get();
+          if (playerDocSnapshot.exists) {
+            const userData = User.fromData(playerDocSnapshot.data());
+            userData.games.push(
+              new UserGame(
+                new UserGameData(
+                  oneGame.date,
+                  oneGame.entry,
+                  oneGame.gameTempId,
+                  player.prize,
+                  player.rank
+                ),
+                oneGame.id,
+                pubDoc.id
+              )
+            );
+            await playerDoc.update(userData.toMap);
+          } else {
+            await playerDoc.set({
+              id: player.id,
+              nickname: player.id,
+              games: [
+                {
+                  gameId: oneGame.id,
+                  pubId: pubDoc.id,
+                  datas: {
+                    date: oneGame.date,
+                    entry: oneGame.entry,
+                    gameTempId: oneGame.gameTempId,
+                    prize: player.prize,
+                    rank: player.rank,
+                  },
+                },
+              ],
+            });
+          }
+        }
+      }
+    }
+  };
+  return (
+    <button className="red bg-red-50" onClick={_testFunc}>
+      테스트 버튼
+    </button>
+  );
+};
 
 const HomeTitle = () => {
   return (
@@ -47,7 +115,7 @@ const BasicBtn = ({ name, route }: BasicBtnProps) => {
         movePage(route);
       }}
     >
-      {name ?? ''}
+      {name ?? ""}
     </button>
   );
 };

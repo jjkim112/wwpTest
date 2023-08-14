@@ -23,7 +23,7 @@ export class User {
     try {
       const id: string = data["id"];
       const nickname: string = data["nickname"];
-      const games: UserGame[] = (data["games"] as UserGame[]).map((v, _) => {
+      const games: UserGame[] = (data["games"] as any[]).map((v, _) => {
         return UserGame.fromData(v);
       });
 

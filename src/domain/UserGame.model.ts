@@ -24,8 +24,7 @@ export class UserGame {
       const datas = data["datas"];
       const gameId = data["gameId"];
       const pubId = data["pubId"];
-
-      return new UserGame(datas, gameId, pubId);
+      return new UserGame(UserGameData.fromData(datas), gameId, pubId);
     } catch (error) {
       var errorGameData = new UserGameData(new Date(0), 0, "", 0, 0);
       console.log(`[UserGames Model] fromData e: ${error}`);

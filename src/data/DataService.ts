@@ -1,7 +1,9 @@
 import { Game, GamePlayerThumb } from "../domain/Game.model";
 import { GameTemplate } from "../domain/GameTemplate.model";
 import { Pub } from "../domain/Pub.model";
+import { User } from "../domain/User.model";
 import { FirebasePub } from "./firebase/FirebasePub";
+import { FirebaseUser } from "./firebase/FirebaseUser";
 
 export class DataService {
   static addPub = async (
@@ -74,18 +76,43 @@ export class DataService {
   ): Promise<boolean> => {
     try {
       const newId = `${Date.now()}_${gameTempId}`;
+      const nowDate = Date.now();
       const isSuccess = await FirebasePub.addNewGame(pubId, newId, {
         id: newId,
         pubId: pubId,
         gameTempId: gameTempId,
         entry: entry,
-        date: Date.now(),
+        date: nowDate,
         players: players,
       });
-      return isSuccess;
+
+      // TODO 같이 움직여야하는 데이터들은 transaction 에 담아 한번에 처리가능하도록 함수 짜보기
+      let isSucessUser = false;
+      if (isSuccess) {
+        isSucessUser = await FirebaseUser.updateUsersWithGame(
+          players,
+          newId,
+          pubId,
+          gameTempId,
+          entry,
+          new Date(nowDate)
+        );
+      }
+
+      return isSuccess && isSucessUser;
     } catch (e) {
       console.log(`[DataService] addGame e: ${e}`);
       return false;
+    }
+  };
+
+  static fetchWholeUser = async (): Promise<User[]> => {
+    try {
+      const users = await FirebaseUser.getWholeUserData();
+      return users;
+    } catch (e) {
+      console.log(`[DataService] fetchWholeUser e: ${e}`);
+      return [];
     }
   };
 }
