@@ -37,9 +37,12 @@ export const Header = () => {
   };
 
   useEffect(() => {
-    console.log(sampleLocation.pathname);
+    console.log(sampleLocation.pathname.split('/'));
+
+    const splitPath = sampleLocation.pathname.split('/');
+    console.log(`/${splitPath[1]}`);
     tabs.map((v, i) => {
-      if (v.mainLink === sampleLocation.pathname) {
+      if (v.mainLink === `/${splitPath[1]}`) {
         setActiveHeaderTab(i);
       }
     });

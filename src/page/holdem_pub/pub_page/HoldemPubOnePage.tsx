@@ -1,29 +1,29 @@
-import { Pub } from "../../../domain/Pub.model";
-import { useState, useEffect } from "react";
+import { Pub } from '../../../domain/Pub.model';
+import { useState, useEffect } from 'react';
 import {
   AiFillPhone,
   AiFillEnvironment,
   AiFillCaretDown,
   AiFillCaretUp,
-} from "react-icons/ai";
-import { AppDispatch, RootState } from "../../../store/store";
-import { useDispatch, useSelector } from "react-redux";
-import { DataService } from "../../../data/DataService";
-import { refreshGames } from "../../../reducer/gameSlice";
-import { useNavigate, useParams } from "react-router-dom";
-import { HeaderTap } from "../../../utils/header/header_tap";
-import { GameTemplate } from "../../../domain/GameTemplate.model";
-import { Game } from "../../../domain/Game.model";
-import { refreshWithPubId } from "../../../reducer/userSlice";
+} from 'react-icons/ai';
+import { AppDispatch, RootState } from '../../../store/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { DataService } from '../../../data/DataService';
+import { refreshGames } from '../../../reducer/gameSlice';
+import { useNavigate, useParams } from 'react-router-dom';
+import { HeaderTap } from '../../../utils/header/header_tap';
+import { GameTemplate } from '../../../domain/GameTemplate.model';
+import { Game } from '../../../domain/Game.model';
+import { refreshWithPubId } from '../../../reducer/userSlice';
 type Section = {
   label: string;
 };
 const tabs: Section[] = [
   {
-    label: "랭킹",
+    label: '랭킹',
   },
   {
-    label: "정보",
+    label: '정보',
   },
 ];
 
@@ -83,7 +83,7 @@ export default function HoldemPubOnePage() {
         <button
           className="border-2 bg-blue-700 text-black font-bold p-3 rounded-lg "
           onClick={() => {
-            navigate("/holdem-pub");
+            navigate('/holdem-pub');
           }}
         >
           ⬅️ 돌아가기
@@ -130,7 +130,7 @@ export default function HoldemPubOnePage() {
             <div>
               {customUsersData.map((user, i) => {
                 return (
-                  <div>
+                  <div key={i}>
                     <div className="my-2" key={`${i}_${user.id}`}>
                       {user.id}
                     </div>
@@ -149,9 +149,9 @@ export default function HoldemPubOnePage() {
                   key={`${i}_${game.id}`}
                 >
                   <div>
-                    {" "}
-                    {_getGameTemp(pickPub?.id ?? "", game.gameTempId)?.title ??
-                      "존재하지 않음"}{" "}
+                    {' '}
+                    {_getGameTemp(pickPub?.id ?? '', game.gameTempId)?.title ??
+                      '존재하지 않음'}{' '}
                   </div>
                   <div> 엔트리 : {game.entry}</div>
                   <div> 일시 : {game.date.toUTCString()} </div>
@@ -168,7 +168,7 @@ export default function HoldemPubOnePage() {
                 <div key={daysIndex} className="py-2">
                   {visibility[daysIndex] ? (
                     <h1 onClick={() => toggleVisibility(daysIndex)}>
-                      <AiFillCaretUp className="inline" />{" "}
+                      <AiFillCaretUp className="inline" />{' '}
                       {`  ${daysValue.day}`}
                     </h1>
                   ) : (
@@ -217,8 +217,8 @@ export default function HoldemPubOnePage() {
       <div className="w-full h-full flex flex-col justify-center  text-center p-10">
         <div> 잘못된 페인지 접근 입니다.</div>
         <br />
-        <button className="bg-white" onClick={() => navigate("/holdem-pub")}>
-          이전페이지로{" "}
+        <button className="bg-white" onClick={() => navigate('/holdem-pub')}>
+          이전페이지로{' '}
         </button>
       </div>
     );
