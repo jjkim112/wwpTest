@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import { Box, Tab, Tabs } from '@mui/material';
+import React, { useState, useEffect, SyntheticEvent } from 'react';
 
 type Section = {
   label: string;
@@ -11,34 +12,36 @@ type HeaderTapProps = {
 
 export const HeaderTap = ({ content, activeTab }: HeaderTapProps) => {
   const [activeHeaderTab, setActiveHeaderTab] = useState(0);
-  const handleClickTab = (index: number) => {
-    activeTab(index);
-    setActiveHeaderTab(index);
-  };
+
+  function handleClickTab(
+    event: SyntheticEvent<Element, Event>,
+    value: any
+  ): void {
+    activeTab(value);
+    setActiveHeaderTab(value);
+  }
 
   return (
-    <div>
-      {content ? (
-        <div className="flex justify-center  text-gray-50 py-3 ">
-          {content.map((tab, index) => (
-            <button
-              key={index}
-              className={`mr-4 cursor-pointer ${
-                activeHeaderTab === index
-                  ? 'pb-1 border-b-2 border-blue-500'
-                  : ''
-              } text-center `}
-              onClick={() => {
-                handleClickTab(index);
-              }}
-            >
-              <span className="text-lg font-medium">{tab.label}</span>
-            </button>
-          ))}
-        </div>
-      ) : (
-        <div></div>
-      )}
-    </div>
+    <Box bgcolor={'black'} color={'white'}>
+      <Tabs
+        value={activeHeaderTab}
+        onChange={handleClickTab}
+        variant="scrollable"
+        scrollButtons
+        allowScrollButtonsMobile
+        aria-label="scrollable force tabs example"
+      >
+        {content ? (
+          content.map((tab, index) => (
+            <Tab
+              label={tab.label}
+              style={{ color: activeHeaderTab === index ? 'white' : 'gray' }}
+            />
+          ))
+        ) : (
+          <Tab label="없음" />
+        )}
+      </Tabs>
+    </Box>
   );
 };

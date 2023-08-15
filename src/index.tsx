@@ -32,7 +32,7 @@ firebase.initializeApp(firebaseConfig);
 root.render(
   <React.StrictMode>
     <div>
-      <div className="mx-auto bg-[rgb(30,41,59)]/[0.8]">
+      <div className="mx-auto bg-[rgb(30,41,59)]/[0.8] ">
         <Provider store={store}>
           <BrowserRouter>
             <Header></Header>

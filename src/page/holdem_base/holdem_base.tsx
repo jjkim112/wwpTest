@@ -1,15 +1,13 @@
 import { useNavigate } from 'react-router-dom';
-import PokerCalPage from '../poker_cal/PokerCalPage';
-import QuotePage from '../quote/QuotePage';
 import { HeaderTap } from '../../utils/header/header_tap';
 import { useState } from 'react';
 import PreFlopRangePage from '../pre_flop_range/PreFlopRangePage';
 import HandRankPage from '../hand_rank/HandRankPage';
-import { type } from 'os';
-import HomePage from '../home/HomePage';
 import HandRankings from './poker_hand_rankings/HandRankings';
 import HoldemPubBase from './holdem_pub_base/HoldemPubBase';
 import HoldemTermsBase from './terms_base/HoldemTermsBase';
+import HoldemPubBetRule from './holdem_pub_bet_rule/HoldemPubBetRule';
+import HoldemPubCardRule from './holdem_pub_card_rule/HoldemPubCardRule';
 type Section = {
   label: string;
 };
@@ -18,6 +16,12 @@ function HoldemBase() {
   const tabs: Section[] = [
     {
       label: '펍 방문시',
+    },
+    {
+      label: '홀덤 베팅 방식',
+    },
+    {
+      label: '홀덤 플레이 방법',
     },
     {
       label: '용어 정리',
@@ -54,6 +58,10 @@ export function HoldemBaseSel({ sel }: selProps): JSX.Element {
 
     case '프리플랍 핸드':
       return <PreFlopRangePage></PreFlopRangePage>;
+    case '홀덤 베팅 방식':
+      return <HoldemPubBetRule></HoldemPubBetRule>;
+    case '홀덤 플레이 방법':
+      return <HoldemPubCardRule></HoldemPubCardRule>;
     case '포커(족보) 랭킹':
       return <HandRankings></HandRankings>;
     case '펍 방문시':
