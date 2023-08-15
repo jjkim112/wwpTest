@@ -245,7 +245,7 @@ export default function HoldemPubBetRule() {
             </div>
           ))}
           <p className="text-white">
-            참고. 스몰 블랑인드 금액 100 + 300 하여 레이즈금액을 맞추어 콜을
+            참고. 스몰 블라인드 금액 100 + 300 하여 레이즈금액을 맞추어 콜을
             할수 있습니다. 물론 레이즈도 가능 합니다.
           </p>
         </div>
