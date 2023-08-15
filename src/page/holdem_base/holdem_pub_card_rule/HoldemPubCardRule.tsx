@@ -1,12 +1,9 @@
-import { useState } from "react";
-
 export default function HoldemPubCardRule() {
-  const [activeHeaderTab, setActiveHeaderTab] = useState(0);
   return (
     <div className="p-2">
       <section className="pb-3">
         <div className="article-container">
-          <h1 className="article-title">{"1. 프리플랍(Pre-Flop)"}</h1>
+          <h1 className="article-title">{'1. 프리플랍(Pre-Flop)'}</h1>
           <img src="/assets/images/table_card/card1.png" alt="table1" />
 
           <div className="content">
@@ -20,7 +17,7 @@ export default function HoldemPubCardRule() {
       </section>
       <section className="pb-3">
         <div className="article-container">
-          <h1 className="article-title">{"2. 플랍(Flop)"}</h1>
+          <h1 className="article-title">{'2. 플랍(Flop)'}</h1>
           <img src="/assets/images/table_card/card2.png" alt="table1" />
 
           <div className="content">
@@ -34,7 +31,7 @@ export default function HoldemPubCardRule() {
       </section>
       <section className="pb-3">
         <div className="article-container">
-          <h1 className="article-title">{"3. 턴(Turn)"}</h1>
+          <h1 className="article-title">{'3. 턴(Turn)'}</h1>
           <img src="/assets/images/table_card/card3.png" alt="table1" />
 
           <div className="content">
@@ -48,7 +45,7 @@ export default function HoldemPubCardRule() {
       </section>
       <section className="pb-3">
         <div className="article-container">
-          <h1 className="article-title">{"4. 리버 (River)"}</h1>
+          <h1 className="article-title">{'4. 리버 (River)'}</h1>
           <img src="/assets/images/table_card/card4.png" alt="table1" />
 
           <div className="content">
@@ -62,7 +59,7 @@ export default function HoldemPubCardRule() {
       </section>
       <section className="pb-3">
         <div className="article-container">
-          <h1 className="article-title">{"5. 승리 방식"}</h1>
+          <h1 className="article-title">{'5. 승리 방식'}</h1>
           <img src="/assets/images/table_card/card5.png" alt="table1" />
 
           <div className="content">
@@ -84,7 +81,7 @@ export default function HoldemPubCardRule() {
       </section>
       <section className="pb-3">
         <div className="article-container">
-          <h1 className="article-title">{"6. 비교방식(2등인 경우)"}</h1>
+          <h1 className="article-title">{'6. 비교방식(2등인 경우)'}</h1>
           <img src="/assets/images/table_card/card6.png" alt="table1" />
 
           <div className="content">
@@ -98,7 +95,7 @@ export default function HoldemPubCardRule() {
       </section>
       <section className="pb-3">
         <div className="article-container">
-          <h1 className="article-title">{"7. 찹(비기는)경우"}</h1>
+          <h1 className="article-title">{'7. 찹(비기는)경우'}</h1>
           <img src="/assets/images/table_card/card7.png" alt="table1" />
 
           <div className="content">

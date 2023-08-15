@@ -1,0 +1,27 @@
+.ability-container {
+  padding: 1rem;
+  margin: 0 auto;
+  line-height: 1.6;
+  font-size: 18px;
+  white-space: pre-wrap;
+}
+
+.ability-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: white;
+}
+
+.ability-container .content p {
+  padding-top: 2px;
+  font-weight: 600;
+}
+
+
+
+
+.ability-container .content p:last-child {
+  margin-bottom: 1rem;
+
+}

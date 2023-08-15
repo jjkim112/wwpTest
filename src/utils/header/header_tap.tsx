@@ -34,6 +34,7 @@ export const HeaderTap = ({ content, activeTab }: HeaderTapProps) => {
         {content ? (
           content.map((tab, index) => (
             <Tab
+              key={index}
               label={tab.label}
               style={{ color: activeHeaderTab === index ? 'white' : 'gray' }}
             />

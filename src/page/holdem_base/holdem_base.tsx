@@ -8,6 +8,7 @@ import HoldemPubBase from './holdem_pub_base/HoldemPubBase';
 import HoldemTermsBase from './terms_base/HoldemTermsBase';
 import HoldemPubBetRule from './holdem_pub_bet_rule/HoldemPubBetRule';
 import HoldemPubCardRule from './holdem_pub_card_rule/HoldemPubCardRule';
+import HoldemVisionAbility from './holdem_vision_ability/HoldemVisionAbility';
 type Section = {
   label: string;
 };
@@ -28,6 +29,9 @@ function HoldemBase() {
     },
     {
       label: '핸드 순위',
+    },
+    {
+      label: '비전 핸드 확률',
     },
 
     {
@@ -64,6 +68,8 @@ export function HoldemBaseSel({ sel }: selProps): JSX.Element {
       return <HoldemPubCardRule></HoldemPubCardRule>;
     case '포커(족보) 랭킹':
       return <HandRankings></HandRankings>;
+    case '비전 핸드 확률':
+      return <HoldemVisionAbility></HoldemVisionAbility>;
     case '펍 방문시':
       return <HoldemPubBase></HoldemPubBase>;
     case '용어 정리':
