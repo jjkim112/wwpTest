@@ -77,7 +77,7 @@ function HandRankings() {
       title: 'Top 10.하이카드\n(High card)',
       imageUrl: '/assets/images/card-ranking/high-card.png',
       content:
-        '5장의 카드가 숫자,\n무늬 모두 다른 경우.가장 높은 숫자부터 비교하여 승자 판별.\n등장 확률 50%는 2판 중 1판은 하이카드(노페어)가 된다는 뜻.',
+        '5장의 카드가 숫자,\n무늬 모두 다른 경우.가장 높은 숫자부터 비교하여 승자 판별.',
       percentage: '(약 17.4%)',
     },
   ];

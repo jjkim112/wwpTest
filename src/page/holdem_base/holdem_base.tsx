@@ -21,7 +21,7 @@ function HoldemBase() {
       label: '홀덤 베팅 방식',
     },
     {
-      label: '홀덤 플레이 방법',
+      label: '홀덤 플레이 방식',
     },
     {
       label: '용어 정리',
@@ -60,7 +60,7 @@ export function HoldemBaseSel({ sel }: selProps): JSX.Element {
       return <PreFlopRangePage></PreFlopRangePage>;
     case '홀덤 베팅 방식':
       return <HoldemPubBetRule></HoldemPubBetRule>;
-    case '홀덤 플레이 방법':
+    case '홀덤 플레이 방식':
       return <HoldemPubCardRule></HoldemPubCardRule>;
     case '포커(족보) 랭킹':
       return <HandRankings></HandRankings>;
