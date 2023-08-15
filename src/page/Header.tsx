@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { HeaderTap } from '../utils/header/header_tap';
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { HeaderTap } from "../utils/header/header_tap";
 
 type IntroductionTab = {
   label: string;
@@ -9,22 +9,26 @@ type IntroductionTab = {
 
 const tabs: IntroductionTab[] = [
   {
-    label: '홈',
-    mainLink: '/',
+    label: "홈",
+    mainLink: "/",
   },
 
   {
-    label: '홀덤 정보',
-    mainLink: '/holdem-base',
+    label: "홀덤 정보",
+    mainLink: "/holdem-base",
   },
   {
-    label: '홀덤 펍/지점',
-    mainLink: '/holdem-pub',
+    label: "홀덤 펍/지점",
+    mainLink: "/holdem-pub",
   },
 
   {
-    label: '포커 계산기',
-    mainLink: '/poker-cal',
+    label: "포커 계산기",
+    mainLink: "/poker-cal",
+  },
+  {
+    label: "포커 요일 등록",
+    mainLink: "/poker-input",
   },
 ];
 
@@ -37,9 +41,9 @@ export const Header = () => {
   };
 
   useEffect(() => {
-    console.log(sampleLocation.pathname.split('/'));
+    console.log(sampleLocation.pathname.split("/"));
 
-    const splitPath = sampleLocation.pathname.split('/');
+    const splitPath = sampleLocation.pathname.split("/");
     console.log(`/${splitPath[1]}`);
     tabs.map((v, i) => {
       if (v.mainLink === `/${splitPath[1]}`) {
@@ -57,8 +61,8 @@ export const Header = () => {
               key={index}
               className={`mr-4 cursor-pointer ${
                 activeHeaderTab === index
-                  ? 'pb-1 border-b-2 border-blue-500'
-                  : ''
+                  ? "pb-1 border-b-2 border-blue-500"
+                  : ""
               } text-center`}
               onClick={() => {
                 handleClickHeaderTab(index);
