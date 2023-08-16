@@ -14,7 +14,7 @@ import { Provider } from "react-redux";
 import { store } from "./store/store";
 import firebase from "firebase/compat/app";
 import HoldemPubOnePage from "./page/holdem_pub/pub_page/HoldemPubOnePage";
-import ProjectCreatePage from "./page/testForinput/test1";
+import ProjectCreatePage from "./page/myTest/fufufufufu";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -44,6 +44,10 @@ root.render(
               <Route path="/holdem-base" element={<HoldemBase />}></Route>
               <Route path="/quote" element={<QuotePage />}></Route>
               <Route path="/poker-cal" element={<PokerCalPage />}></Route>
+              <Route
+                path="/poker-input"
+                element={<ProjectCreatePage />}
+              ></Route>
               <Route
                 path="/poker-input"
                 element={<ProjectCreatePage />}
