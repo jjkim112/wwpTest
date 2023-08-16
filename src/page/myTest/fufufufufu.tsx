@@ -1,75 +1,78 @@
 import React, { useState } from "react";
 import { Box } from "./testsetse";
-import { TestComp, TestComp2 } from "./testComp";
+import { TestComp } from "./testComp";
+import { WeekDayBox } from "./WeekDayBox";
 
 interface BoxInfo {
   age: string;
   gender: string;
   country: string;
+  days: string[];
 }
 
 const App: React.FC = () => {
   const [age, setAge] = useState("");
   const [gender, setGender] = useState("");
   const [country, setCountry] = useState("");
+  const [days, setDays] = useState<string[]>([]);
   const [boxes, setBoxes] = useState<BoxInfo[]>([]);
   const [selectedBoxIndex, setSelectedBoxIndex] = useState<number | null>(null);
 
   const handleAddBox = () => {
-    setBoxes([...boxes, { age, gender, country }]);
-    resetInput();
-  };
-
-  const handleClickBox = (boxInfo: BoxInfo, index: number) => {
-    setSelectedBoxIndex(index);
-    setAge(boxInfo.age);
-    setGender(boxInfo.gender);
-    setCountry(boxInfo.country);
-  };
-
-  const updateBox = () => {
-    if (selectedBoxIndex === null) return;
-    const newBoxes = [...boxes];
-    newBoxes[selectedBoxIndex] = { age, gender, country };
-    setBoxes(newBoxes);
-    resetInput();
-    setSelectedBoxIndex(null);
-  };
-
-  const resetInput = () => {
+    setBoxes([...boxes, { age, gender, country, days }]);
     setAge("");
     setGender("");
     setCountry("");
+    setDays([]);
+  };
+
+  const updateBox = () => {
+    setBoxes(
+      boxes.map((box, index) =>
+        index === selectedBoxIndex ? { age, gender, country, days } : box
+      )
+    );
+
+    setAge("");
+    setGender("");
+    setCountry("");
+    setDays([]);
+    setSelectedBoxIndex(null);
+  };
+
+  const handleClickBox = (box: BoxInfo, index: number) => {
+    if (selectedBoxIndex === index) {
+      setSelectedBoxIndex(null);
+    } else {
+      setSelectedBoxIndex(index);
+      setAge(box.age);
+      setGender(box.gender);
+      setCountry(box.country);
+      setDays(box.days);
+    }
   };
 
   return (
     <div className="flex flex-col">
       <TestComp
-        title="나이입력"
-        placeholder="나이"
+        title="개발입력"
+        placeholder="개발"
         content={age}
         setContent={setAge}
       />
-      {/* <TestComp2
-        title="나이입력"
-        placeholder="나이"
-        content={age}
-        onChange={(e) => {
-          setAge(e.target.value);
-        }}
-      /> */}
-      <span>성별입력</span>
-      <input
-        placeholder="성별"
-        value={gender}
-        onChange={(e) => setGender(e.target.value)}
+      <TestComp
+        title="응가입력"
+        placeholder="응가"
+        content={gender}
+        setContent={setGender}
       />
-      <span>국가입력</span>
-      <input
-        placeholder="국가"
-        value={country}
-        onChange={(e) => setCountry(e.target.value)}
+      <TestComp
+        title="방구입력"
+        placeholder="방구"
+        content={country}
+        setContent={setCountry}
       />
+
       {selectedBoxIndex === null ? (
         <button onClick={handleAddBox}>추가</button>
       ) : (
@@ -83,10 +86,13 @@ const App: React.FC = () => {
             age={box.age}
             gender={box.gender}
             country={box.country}
+            days={box.days}
             onClick={() => handleClickBox(box, index)}
           />
         ))}
       </div>
+
+      <WeekDayBox selectedDays={days} onDaySelect={setDays} />
     </div>
   );
 };
