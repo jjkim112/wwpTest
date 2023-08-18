@@ -21,6 +21,7 @@ const StyledBox = styled.div<{ isSelected: boolean }>`
     opacity: 0.7;
   }
 `;
+//이 스타일 컴포넌트는 그사람의 힘을 빌렸어요
 
 export const WeekDayBox: React.FC<WeekDayBoxProps> = ({
   selectedDays,
@@ -32,6 +33,8 @@ export const WeekDayBox: React.FC<WeekDayBoxProps> = ({
       : [...selectedDays, day];
 
     onDaySelect(newDays);
+    //클릭과 동시에 받아오는 selectedDays를 업뎃, 즉 플옵스로 받는 days의 useState를 바로 실시간으로 업데이트
+    //그렇게 selectecdDays 안에 해당 요일이 있으면 색 변경-참,거짓으로 진행
   };
 
   return (
@@ -40,6 +43,7 @@ export const WeekDayBox: React.FC<WeekDayBoxProps> = ({
         <StyledBox
           key={day}
           isSelected={selectedDays.includes(day)}
+          //여기서 스타일 컴포넌트 플옵수 사용데스
           onClick={() => handleDayClick(day)}
         >
           {day}

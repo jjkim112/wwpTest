@@ -12,41 +12,6 @@ import { refreshGames } from "../../reducer/gameSlice";
 import HoldemPubOnePage from "./pub_page/HoldemPubOnePage";
 import { setUsers } from "../../reducer/userSlice";
 
-const pubList = [
-  {
-    imgUrl: "/assets/images/wp_title.gif",
-    pubName: "슈에뜨 펍",
-    place: "제주",
-    popularityType: "인기좋음",
-    starRating: 5.0,
-    content: "djsakljdaklsjdlsajdjlksajdlajsldjlsajdasdasdasdasdsa",
-  },
-  {
-    imgUrl: "/assets/images/background.png",
-    pubName: "럭키 라운지펍",
-    place: "제주",
-    popularityType: "신규",
-    starRating: 4.0,
-    content: "djsakljdaklsjdlsajdjlksajdlajsldjlsajdasdasdasdasdsa",
-  },
-  {
-    imgUrl: "/assets/images/background.png",
-    pubName: "럭키 스튜디오",
-    place: "제주",
-    popularityType: "best2",
-    starRating: 3.2,
-    content: "djsakljdaklsjdlsajdjlksajdlajsldjlsajdasdasdasdasdsa",
-  },
-  {
-    imgUrl: "/assets/images/background.png",
-    pubName: "제주",
-    place: "제주",
-    popularityType: null,
-    starRating: 2.2,
-    content: "djsakljdaklsjdlsajdjlksajdlajsldjlsajdasdasdasdasdsa",
-  },
-];
-
 export function HoldemPubPage() {
   const pubsData = useSelector((state: RootState) => state.pub.pubs);
   const [pickPub, setPickPub] = useState<Pub>();

@@ -63,6 +63,10 @@ const PokerCalPage = () => {
       return prev + curr;
     });
   };
+
+  const remainCards = useSelector(
+    (state: RootState) => state.pokerCal.remainCards
+  );
   const communityCards = useSelector(
     (state: RootState) => state.pokerCal.communityCards
   );
@@ -142,6 +146,12 @@ const PokerCalPage = () => {
     <div className="flex flex-col mx-auto">
       <div className="flex flex-col mx-auto">
         <div className="text-center text-4xl my-2">포커 계산기</div>
+        <div className="flex flex-wrap">
+          {remainCards.map((v) => ` (${v}) `)}
+        </div>
+        <div>{communityCards.map((v) => ` (${v}) `)}</div>
+        <div>{players.map((p) => ` ${p.hand.map((v) => ` (${v}) `)} `)}</div>
+
         <div className="text-center text-2xl my-2">커뮤니티 카드</div>
         <CommunityCardPart
           communityCards={communityCards}

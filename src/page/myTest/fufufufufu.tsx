@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Box } from "./testsetse";
 import { TestComp } from "./testComp";
-import { WeekDayBox } from "./WeekDayBox";
+import { WeekDayBox } from "./weekDayBox";
 
 interface BoxInfo {
   age: string;
@@ -42,7 +42,8 @@ const App: React.FC = () => {
 
   const handleClickBox = (box: BoxInfo, index: number) => {
     if (selectedBoxIndex === index) {
-      setSelectedBoxIndex(null);
+      // setSelectedBoxIndex(null);
+      //이거 다시 취소하는거 생각하기 그냥 수정 다시 누르는거 ux불편
     } else {
       setSelectedBoxIndex(index);
       setAge(box.age);
@@ -72,7 +73,7 @@ const App: React.FC = () => {
         content={country}
         setContent={setCountry}
       />
-
+      <WeekDayBox selectedDays={days} onDaySelect={setDays} />
       {selectedBoxIndex === null ? (
         <button onClick={handleAddBox}>추가</button>
       ) : (
@@ -91,8 +92,6 @@ const App: React.FC = () => {
           />
         ))}
       </div>
-
-      <WeekDayBox selectedDays={days} onDaySelect={setDays} />
     </div>
   );
 };

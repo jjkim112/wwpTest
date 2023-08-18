@@ -30,6 +30,10 @@ const tabs: IntroductionTab[] = [
     label: "포커 요일 등록",
     mainLink: "/poker-input",
   },
+  {
+    label: "포커 게임등록",
+    mainLink: "/poker-tournamentRegist",
+  },
 ];
 
 export const Header = () => {

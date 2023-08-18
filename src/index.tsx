@@ -15,6 +15,7 @@ import { store } from "./store/store";
 import firebase from "firebase/compat/app";
 import HoldemPubOnePage from "./page/holdem_pub/pub_page/HoldemPubOnePage";
 import ProjectCreatePage from "./page/myTest/fufufufufu";
+import EnhancedTable from "./page/tournamentRegister/main";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -48,6 +49,11 @@ root.render(
                 path="/poker-input"
                 element={<ProjectCreatePage />}
               ></Route>
+              <Route
+                path="/poker-tournamentRegist"
+                element={<EnhancedTable />}
+              ></Route>
+
               <Route
                 path="/poker-input"
                 element={<ProjectCreatePage />}
