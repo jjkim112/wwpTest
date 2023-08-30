@@ -109,15 +109,48 @@ const initialRows: PlayerTypeData[] = [
   },
 ];
 
+interface Data {
+  gameTemplate?: Template[] | [];
+  note: string;
+  totalReward: number;
+  entry: number;
+  date: number;
+  name: string;
+  pubId: number;
+  players?: PlayerTypeData[] | [];
+}
+
 export default function BasicTextFields() {
   const [playerList, setPlayerList] =
     React.useState<PlayerTypeData[]>(initialRows);
+  const [inputs, setInputs] = React.useState<Data>({
+    gameTemplate: [],
+    note: "",
+    totalReward: 0,
+    entry: 0,
+    date: 0,
+    name: "",
+    pubId: -1,
+    players: [],
+  });
 
   const [gameTemplate, setGameTemplate] = React.useState<string>();
   const addInfoToList = () => {
     return;
   };
 
+  const mergeInputBox = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
+    const nextInputs: Data = {
+      //spread 문법. 현재 상태의 내용이 이 자리로 온다.
+      ...inputs,
+      [name]: value,
+    };
+    console.log(nextInputs);
+    //객체를 새로운 상태로 쓰겠다.
+    setInputs(nextInputs);
+  };
   return (
     <div className="flex flex-col justify-center items-center">
       <Box
@@ -139,10 +172,23 @@ export default function BasicTextFields() {
               </DemoContainer>
             </LocalizationProvider>
           </div>
+
           <div className="flex gap-3">
-            <TextField id="entry" label="엔트리" variant="outlined" />
-            <TextField id="totalReward" label="총상금" variant="outlined" />
             <TextField
+              name="entry"
+              onChange={mergeInputBox}
+              id="entry"
+              label="엔트리"
+              variant="outlined"
+            />
+            <TextField
+              name="totalReward"
+              id="totalReward"
+              label="총상금"
+              variant="outlined"
+            />
+            <TextField
+              name="pubId"
               id="standard-basic"
               label="지점아이디"
               variant="outlined"
@@ -152,6 +198,7 @@ export default function BasicTextFields() {
               select //선택하는 형태로 바꿔주는거
               label="게임템플릿"
               defaultValue="noChoice"
+              // placeholder="방구를뀌시오"
               helperText="Please select your currency"
               value={gameTemplate}
               onChange={(e) => setGameTemplate(e.target.value)}

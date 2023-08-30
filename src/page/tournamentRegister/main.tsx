@@ -40,12 +40,6 @@ export interface Template {
   desc: string;
 }
 
-export const temporaryGameTemplate: Template[] = [
-  { id: "1", title: "타이틀1", subTitle: "a", desc: "설명1" },
-  { id: "1", title: "타이틀2", subTitle: "b", desc: "설명2" },
-  { id: "1", title: "타이틀3", subTitle: "c", desc: "설명3" },
-];
-
 interface Data {
   gameTemplate: Template[];
   note: string;
@@ -78,7 +72,11 @@ function createData(
     players,
   };
 }
-
+export const temporaryGameTemplate: Template[] = [
+  { id: "1", title: "타이틀1", subTitle: "a", desc: "설명1" },
+  { id: "1", title: "타이틀2", subTitle: "b", desc: "설명2" },
+  { id: "1", title: "타이틀3", subTitle: "c", desc: "설명3" },
+];
 export const rows = [
   createData(
     temporaryGameTemplate,

@@ -195,8 +195,8 @@ export const FullFeaturedCrudGrid: React.FC<PlayerListInputProps> = ({
       editable: true,
     },
     {
-      field: "detail",
-      headerName: "Detail",
+      field: "note",
+      headerName: "Note",
       type: "string",
       width: 200,
       align: "center",
