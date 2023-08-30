@@ -13,6 +13,7 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { GridRowsProp } from "@mui/x-data-grid";
 import { FullFeaturedCrudGrid } from "./playerInputBoard";
 import { PlayerTypeData, Template } from "./main";
+import { type } from "os";
 
 const currencies: Template[] = [
   {
@@ -110,47 +111,77 @@ const initialRows: PlayerTypeData[] = [
 ];
 
 interface Data {
-  gameTemplate?: Template[] | [];
+  // gameTemplate?: Template[] | [];
+  gameTemplateId: string;
   note: string;
   totalReward: number;
   entry: number;
-  date: number;
+  date: Date;
   name: string;
   pubId: number;
-  players?: PlayerTypeData[] | [];
+  players: PlayerTypeData[];
 }
 
-export default function BasicTextFields() {
+interface TextFieldProps {
+  rowList: Data[];
+  setRowList2: (v: Data[]) => void;
+}
+
+export const BasicTextFields: React.FC<TextFieldProps> = ({
+  rowList,
+  setRowList2,
+}) => {
   const [playerList, setPlayerList] =
     React.useState<PlayerTypeData[]>(initialRows);
   const [inputs, setInputs] = React.useState<Data>({
-    gameTemplate: [],
+    gameTemplateId: "",
     note: "",
     totalReward: 0,
     entry: 0,
-    date: 0,
+    date: new Date(),
     name: "",
     pubId: -1,
     players: [],
   });
 
-  const [gameTemplate, setGameTemplate] = React.useState<string>();
+  const [inputGameTemplate, setInputGameTemplate] = React.useState<string>();
+  const [inputDateData, setInputDateData] = React.useState(new Date());
   const addInfoToList = () => {
-    return;
+    setRowList2([
+      ...rowList,
+      {
+        ...inputs,
+        ["players"]: playerList,
+      },
+    ]);
   };
 
   const mergeInputBox = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
     const { name, value } = e.target;
-
-    const nextInputs: Data = {
-      //spread 문법. 현재 상태의 내용이 이 자리로 온다.
+    console.log(name);
+    console.log(value);
+    let nextInputs: Data = {
       ...inputs,
       [name]: value,
     };
+    if (name === "gameTemplateId") {
+      for (let oneTemplate of currencies) {
+        if (oneTemplate.id === value) {
+          console.log("이름적용");
+          nextInputs = {
+            ...inputs,
+            ["name"]: oneTemplate.title,
+          };
+        }
+      }
+    }
+
     console.log(nextInputs);
-    //객체를 새로운 상태로 쓰겠다.
+
     setInputs(nextInputs);
   };
+
   return (
     <div className="flex flex-col justify-center items-center">
       <Box
@@ -168,7 +199,18 @@ export default function BasicTextFields() {
           <div className="-my-2">
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DemoContainer components={["DateTimePicker"]}>
-                <DateTimePicker label="날짜 및 시간" />
+                <DateTimePicker
+                  onChange={(newValue: any) => {
+                    const nextInputs: Data = {
+                      ...inputs,
+                      ["date"]: newValue,
+                    };
+                    console.log(nextInputs);
+
+                    setInputs(nextInputs);
+                  }}
+                  label="날짜 및 시간"
+                />
               </DemoContainer>
             </LocalizationProvider>
           </div>
@@ -183,14 +225,23 @@ export default function BasicTextFields() {
             />
             <TextField
               name="totalReward"
+              onChange={mergeInputBox}
               id="totalReward"
               label="총상금"
               variant="outlined"
             />
             <TextField
               name="pubId"
+              onChange={mergeInputBox}
               id="standard-basic"
               label="지점아이디"
+              variant="outlined"
+            />
+            <TextField
+              name="note"
+              onChange={mergeInputBox}
+              id="standard-basic"
+              label="비고"
               variant="outlined"
             />
             <TextField
@@ -200,8 +251,9 @@ export default function BasicTextFields() {
               defaultValue="noChoice"
               // placeholder="방구를뀌시오"
               helperText="Please select your currency"
-              value={gameTemplate}
-              onChange={(e) => setGameTemplate(e.target.value)}
+              // onChange={(e) => setInputGameTemplate(e.target.value)}
+              onChange={mergeInputBox}
+              name="gameTemplateId"
             >
               {currencies.map((option) => (
                 <MenuItem key={option.id} value={option.id}>
@@ -220,4 +272,4 @@ export default function BasicTextFields() {
       </button>
     </div>
   );
-}
+};

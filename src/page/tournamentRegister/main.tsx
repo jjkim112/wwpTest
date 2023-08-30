@@ -19,9 +19,9 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
 import { PlayerButton } from "./playerButton";
-import BasicTextFields from "./playerInputBox";
 import { DetailTournaUser } from "./detailTournaUser";
 import { GameTemplate } from "../../domain/GameTemplate.model";
+import { BasicTextFields } from "./playerInputBox";
 
 // import { BasicTextFields } from "./playerInputBox";
 
@@ -40,29 +40,32 @@ export interface Template {
   desc: string;
 }
 
-interface Data {
-  gameTemplate: Template[];
+export interface Data {
+  // gameTemplate: Template[];
+  gameTemplateId: string;
   note: string;
   totalReward: number;
   entry: number;
-  date: number;
+  date: Date;
   name: string;
   pubId: number;
   players: PlayerTypeData[];
 }
 
 function createData(
-  gameTemplate: Template[],
+  // gameTemplate: Template[],
+  gameTemplateId: string,
   note: string,
   name: string,
   totalReward: number,
-  date: number,
+  date: Date,
   entry: number,
   pubId: number,
   players: PlayerTypeData[]
 ): Data {
   return {
-    gameTemplate,
+    gameTemplateId,
+    // gameTemplate,
     note,
     name,
     totalReward,
@@ -79,11 +82,12 @@ export const temporaryGameTemplate: Template[] = [
 ];
 export const rows = [
   createData(
-    temporaryGameTemplate,
+    // temporaryGameTemplate[],
+    "0",
     "비고없음",
     temporaryGameTemplate[0].title,
     305,
-    3.7,
+    new Date(),
     67,
     4.3,
     [
@@ -99,11 +103,12 @@ export const rows = [
   ),
 
   createData(
-    temporaryGameTemplate,
+    // temporaryGameTemplate,
+    "1",
     "비고없음",
     temporaryGameTemplate[1].title,
     1,
-    18.5,
+    new Date(),
     65,
     4.1,
     [
@@ -126,11 +131,12 @@ export const rows = [
     ]
   ),
   createData(
-    temporaryGameTemplate,
+    // temporaryGameTemplate,
+    "2",
     "비고없음",
     temporaryGameTemplate[2].title,
     2,
-    18.5,
+    new Date(),
     65,
     4.1,
     [
@@ -166,7 +172,8 @@ export default function EnhancedTable() {
   const [playerList, setPlayerList] = React.useState<PlayerTypeData[]>([]);
 
   const registerTournaInfo = ({
-    gameTemplate,
+    // gameTemplate,
+    gameTemplateId,
     note,
     name,
     totalReward,
@@ -178,7 +185,8 @@ export default function EnhancedTable() {
     setRowList((prev) => [
       ...prev,
       {
-        gameTemplate: gameTemplate,
+        // gameTemplate: gameTemplate,
+        gameTemplateId: gameTemplateId,
         note: note,
         name: name,
         totalReward: totalReward,
@@ -318,7 +326,9 @@ export default function EnhancedTable() {
                           {row.name}
                         </TableCell>
                         <TableCell align="right">{row.totalReward}</TableCell>
-                        <TableCell align="right">{row.date}</TableCell>
+                        <TableCell align="right">
+                          {row.date.toLocaleString()}
+                        </TableCell>
                         <TableCell align="right">{row.entry}</TableCell>
                         <TableCell align="right">{row.pubId}</TableCell>
                         <TableCell
@@ -362,7 +372,7 @@ export default function EnhancedTable() {
         <DetailTournaUser playerList={playerList} />
       </div>
       <div>
-        <BasicTextFields />
+        <BasicTextFields rowList={rowList} setRowList2={setRowList} />
       </div>
     </>
   );
@@ -449,8 +459,8 @@ function getComparator<Key extends keyof any>(
   order: Order,
   orderBy: Key
 ): (
-  a: { [key in Key]: number | string | PlayerTypeData[] | Template[] },
-  b: { [key in Key]: number | string | PlayerTypeData[] | Template[] }
+  a: { [key in Key]: number | string | PlayerTypeData[] | Template[] | Date },
+  b: { [key in Key]: number | string | PlayerTypeData[] | Template[] | Date }
 ) => number {
   return order === "desc"
     ? (a, b) => descendingComparator(a, b, orderBy)
