@@ -3,7 +3,6 @@ import Box from "@mui/material/Box";
 
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
-import { playerInputItem } from "./playerInput";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";

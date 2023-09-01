@@ -265,7 +265,7 @@ export default function EnhancedTable() {
         page * rowsPerPage,
         page * rowsPerPage + rowsPerPage
       ),
-    [order, orderBy, page, rowsPerPage]
+    [order, orderBy, page, rowsPerPage, rowList]
   );
 
   return (
@@ -301,7 +301,7 @@ export default function EnhancedTable() {
                         role="checkbox"
                         aria-checked={isItemSelected}
                         tabIndex={-1}
-                        key={row.name}
+                        key={index}
                         selected={isItemSelected}
                         sx={{ cursor: "pointer" }}
                       >
@@ -331,12 +331,7 @@ export default function EnhancedTable() {
                         </TableCell>
                         <TableCell align="right">{row.entry}</TableCell>
                         <TableCell align="right">{row.pubId}</TableCell>
-                        <TableCell
-                          onClick={() => {
-                            console.log("test");
-                          }}
-                          align="right"
-                        >
+                        <TableCell align="right">
                           <PlayerButton
                             onClick={() => {
                               setPlayerList(row.players);
